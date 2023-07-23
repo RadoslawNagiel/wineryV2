@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Winery</string>
+    <string name="title_activity_main">Winery</string>
+    <string name="package_name">pl.rn.winery</string>
+    <string name="custom_url_scheme">pl.rn.winery</string>
+</resources>
