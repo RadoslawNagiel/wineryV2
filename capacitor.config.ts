@@ -1,12 +1,9 @@
-import { CapacitorConfig } from '@capacitor/cli';
+import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'pl.rn.winery',
-  appName: 'Winery',
-  webDir: 'www',
-  server: {
-    androidScheme: 'https'
-  }
+    appId: `com.bekarn.winery`,
+    appName: `winery`,
+    webDir: `www`,
 };
 
 export default config;

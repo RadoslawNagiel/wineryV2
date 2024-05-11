@@ -1,12 +1,14 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { IonicModule } from '@ionic/angular';
+import { IonHeader } from '@ionic/angular/standalone';
+import { ExploreContainerComponent } from '../explore-container/explore-container.component';
 
 @Component({
-  selector: 'app-tab2',
-  templateUrl: 'tab2.page.html',
-  styleUrls: ['tab2.page.scss']
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [IonicModule, ExploreContainerComponent],
+    selector: `app-tab2`,
+    templateUrl: `tab2.page.html`,
+    styleUrls: [`tab2.page.scss`],
 })
-export class Tab2Page {
-
-  constructor() {}
-
-}
+export default class Tab2Page {}

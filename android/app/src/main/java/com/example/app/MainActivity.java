@@ -1,4 +1,4 @@
-package pl.rn.winery;
+package com.bekarn.winery;
 
 import com.getcapacitor.BridgeActivity;
 
