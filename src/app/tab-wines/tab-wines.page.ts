@@ -2,7 +2,7 @@ import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { Wine } from '../../utils/interfaces';
-import { SearchPipe } from '../../pipes/search.pipe';
+import { SearchPipe } from '../../utils/pipes/search.pipe';
 import { HeaderComponent } from '../../components/header/header.component';
 import { NoDataComponent } from '../../components/no-data/no-data.component';
 import { RouterLink } from '@angular/router';

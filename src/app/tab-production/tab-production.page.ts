@@ -3,7 +3,7 @@ import { IonicModule } from '@ionic/angular';
 import { Wine } from '../../utils/interfaces';
 import { DatePipe } from '@angular/common';
 import { HeaderComponent } from '../../components/header/header.component';
-import { SearchPipe } from '../../pipes/search.pipe';
+import { SearchPipe } from '../../utils/pipes/search.pipe';
 import { NoDataComponent } from '../../components/no-data/no-data.component';
 
 @Component({

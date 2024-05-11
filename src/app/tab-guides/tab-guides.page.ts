@@ -4,7 +4,7 @@ import { IonicModule } from '@ionic/angular';
 import { HeaderComponent } from '../../components/header/header.component';
 import { GUIDES } from '../../utils/guides';
 import { Guide } from '../../utils/interfaces';
-import { SearchPipe } from '../../pipes/search.pipe';
+import { SearchPipe } from '../../utils/pipes/search.pipe';
 import { NoDataComponent } from '../../components/no-data/no-data.component';
 
 @Component({

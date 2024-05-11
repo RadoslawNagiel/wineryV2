@@ -20,9 +20,12 @@
         "@capacitor/android": "^6.0.0",
         "@capacitor/core": "^6.0.0",
         "@ionic/angular": "^8.0.0",
+        "@ngxs/store": "^3.8.2",
         "ionicons": "^7.0.0",
         "rxjs": "~7.8.0",
+        "subsink": "^1.0.2",
         "tslib": "^2.3.0",
+        "uuid": "^9.0.1",
         "zone.js": "~0.14.2"
     },
     "devDependencies": {
@@ -33,6 +36,7 @@
         "@capacitor/cli": "^6.0.0",
         "@ionic/angular-toolkit": "^11.0.1",
         "@types/jasmine": "~5.1.0",
+        "@types/uuid": "^9.0.8",
         "eslint-config-anp": "^1.0.36",
         "globals": "^15.2.0",
         "jasmine-core": "~5.1.0",

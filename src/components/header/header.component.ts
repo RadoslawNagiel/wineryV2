@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Output, inject, input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import { ThemeService } from '../../services/theme.service';
+import { ThemeService } from '../../utils/services/theme.service';
 
 @Component({
     standalone: true,

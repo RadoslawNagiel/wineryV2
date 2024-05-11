@@ -2,7 +2,6 @@ import { ProductionStage, Recipe, Units } from '../utils/interfaces';
 
 export const RECIPES: Recipe[] = [
     {
-        id: ``,
         name: `Wino agrestowe`,
         slug: `wino-agrestowe`,
         ingredients: [
@@ -36,7 +35,6 @@ export const RECIPES: Recipe[] = [
         ],
     },
     {
-        id: ``,
         name: `Wino ananasowo-winogronowe`,
         slug: `wino-ananasowo-winogronowe`,
         ingredients: [
@@ -60,7 +58,6 @@ export const RECIPES: Recipe[] = [
         ],
     },
     {
-        id: ``,
         name: `Wino z brzoskwiń`,
         slug: `wino-z-brzoskwin`,
         ingredients: [
@@ -79,7 +76,6 @@ export const RECIPES: Recipe[] = [
         ],
     },
     {
-        id: ``,
         name: `Wino z czarnych porzeczek`,
         slug: `wino-z-czarnych-porzeczek`,
         ingredients: [
@@ -98,7 +94,6 @@ export const RECIPES: Recipe[] = [
         ],
     },
     {
-        id: ``,
         name: `Wino z czerwonych porzeczek`,
         slug: `wino-z-czerwonych-porzeczek`,
         ingredients: [
@@ -122,7 +117,6 @@ export const RECIPES: Recipe[] = [
         ],
     },
     {
-        id: ``,
         name: `Wino z soku owocowego`,
         slug: `wino-z-soku-owocowego`,
         ingredients: [
@@ -146,7 +140,6 @@ export const RECIPES: Recipe[] = [
         ],
     },
     {
-        id: ``,
         name: `Wino z gruszek`,
         slug: `wino-z-gruszek`,
         ingredients: [
@@ -165,7 +158,6 @@ export const RECIPES: Recipe[] = [
         ],
     },
     {
-        id: ``,
         name: `Wino jabłkowe`,
         slug: `wino-jabłkowe`,
         ingredients: [
@@ -184,7 +176,6 @@ export const RECIPES: Recipe[] = [
         ],
     },
     {
-        id: ``,
         name: `Wino śliwkowe`,
         slug: `wino-sliwkowe`,
         ingredients: [
@@ -203,7 +194,6 @@ export const RECIPES: Recipe[] = [
         ],
     },
     {
-        id: ``,
         name: `Wino wiśniowe`,
         slug: `wino-wisniowe`,
         ingredients: [

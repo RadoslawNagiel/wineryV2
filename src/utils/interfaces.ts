@@ -24,7 +24,6 @@ export interface Ingredient {
 
 export interface Recipe {
     slug: string;
-    id: string;
     name: string;
     ingredients: Ingredient[];
     productStages: ProductStage[];
