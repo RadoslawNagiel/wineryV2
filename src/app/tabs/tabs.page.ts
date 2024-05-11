@@ -7,6 +7,5 @@ import { IonicModule } from '@ionic/angular';
     imports: [IonicModule],
     selector: `app-tabs`,
     templateUrl: `tabs.page.html`,
-    styleUrls: [`tabs.page.scss`],
 })
 export default class TabsPage {}
