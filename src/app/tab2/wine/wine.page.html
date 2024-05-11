@@ -1,0 +1,12 @@
+<ion-header collapse="fade">
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button text="" defaultHref="/tabs/tab3"></ion-back-button>
+        </ion-buttons>
+        @if(wine(); as wine){
+        <ion-title>{{wine.name}}</ion-title>
+        }
+    </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding"> </ion-content>

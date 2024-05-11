@@ -1,32 +1,32 @@
 <ion-header collapse="fade">
     <ion-toolbar>
         <ion-buttons slot="start">
-            <ion-back-button text="" defaultHref="/tabs/tab4"></ion-back-button>
+            <ion-back-button text="" defaultHref="/tabs/tab3"></ion-back-button>
         </ion-buttons>
-        <ion-title>Poradnik</ion-title>
+        @if(recipe(); as recipe){
+        <ion-title>{{recipe.name}}</ion-title>
+        }
     </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-    @if(guide(); as guide){
-    <ion-card>
+<ion-content [fullscreen]="true" class="ion-padding">
+    @if(recipe(); as recipe){
+    <ion-card-title>Składniki na 10 litrów:</ion-card-title>
+    <ion-list class="py-0 my-2">
+        @for (ingredient of recipe.ingredients; track $index) {
+        <ion-item [lines]="$index === recipe.ingredients.length -1 ? 'none' : ''">
+            {{ingredient.name}} - {{ingredient.value}} {{ingredient.unit}}
+        </ion-item>
+        }
+    </ion-list>
+    <ion-card-title class="mt-4">Etapy produkcji:</ion-card-title>
+    @for (stage of recipe.productStages; track $index) {
+    <ion-card class="mx-0">
         <ion-card-header>
-            <ion-card-title>{{guide.name}}</ion-card-title>
+            <ion-card-title>Dzień {{ stage.date / 86400000 }}: {{ stage.name }}</ion-card-title>
         </ion-card-header>
-        <ion-card-content class="flex flex-col gap-4">
-            <div class="whitespace-pre-line" [innerHTML]="guide.description"></div>
-            @if(guide.calculator === Calculators.BLG){
-            <app-calc-blg></app-calc-blg>
-            } @if(guide.calculator === Calculators.SYRUP){
-            <app-calc-glucose-syrup></app-calc-glucose-syrup>
-            } @if(guide.guides.length){
-            <div class="flex flex-wrap">
-                @for(guideLink of guide.guides; track $index){
-                <ion-chip [routerLink]="'/tabs/tab3/' + guideLink.slug" (click)="loadSlug(guideLink.slug)">{{guideLink.name}}</ion-chip>
-                }
-            </div>
-            }
-        </ion-card-content>
+
+        <ion-card-content> {{stage.description}} </ion-card-content>
     </ion-card>
-    }
+    } }
 </ion-content>

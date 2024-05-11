@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
+import { ThemeService } from '../services/theme.service';
 
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -8,4 +9,10 @@ import { IonicModule } from '@ionic/angular';
     selector: `app-root`,
     templateUrl: `app.component.html`,
 })
-export class AppComponent {}
+export class AppComponent {
+    themeService = inject(ThemeService);
+
+    ngOnInit() {
+        this.themeService.initTheme();
+    }
+}

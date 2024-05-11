@@ -1,6 +1,11 @@
 <ion-header collapse="fade">
     <ion-toolbar>
         <ion-title>{{ header() }}</ion-title>
+        <ion-buttons slot="end">
+            <ion-button (click)="themeService.toggleMode()">
+                <ion-icon slot="icon-only" icon="sunny-outline"></ion-icon>
+            </ion-button>
+        </ion-buttons>
     </ion-toolbar>
     @if (search()) {
         <ion-toolbar>

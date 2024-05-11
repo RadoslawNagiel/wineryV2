@@ -3,7 +3,7 @@
 <ion-content [fullscreen]="true">
     @if ((wines() | search: {param: ['name', 'description'], search: searchValue()}); as wines) { @if (wines.length) { @for (wine of wines; track
     $index) {
-    <ion-card>
+    <ion-card [routerLink]="'/tabs/tab2/' + wines.id">
         <img alt="Zdjęcie wina" [src]="wine.imageBase64 ?? 'assets/empty-image.png'" />
         <ion-card-header>
             <ion-card-title>{{wine.name}}</ion-card-title>

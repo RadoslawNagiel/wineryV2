@@ -1,31 +1,32 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
-import { Recipe } from '../../../utils/interfaces';
-import { RECIPES } from '../../../utils/recipes';
+import { Wine } from '../../../utils/interfaces';
 
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: true,
-    selector: `recipe`,
-    templateUrl: `recipe.page.html`,
+    selector: `wine`,
+    templateUrl: `wine.page.html`,
     imports: [IonicModule],
 })
-export default class RecipePage {
-    recipe = signal<Recipe | undefined>(undefined);
+export default class WinePage {
+    wine = signal<Wine | undefined>(undefined);
 
     router = inject(Router);
 
+    allWines = [];
+
     ngOnInit() {
         const urlTree = this.router.parseUrl(this.router.url);
-        const slug = urlTree.root.children['primary'].segments
+        const id = urlTree.root.children['primary'].segments
             .map((it: any) => it.path)
             .join('/')
             .substring(10);
-        this.loadSlug(slug);
+        this.loadId(id);
     }
 
-    loadSlug(slug: string) {
-        this.recipe.set(structuredClone(RECIPES).find((g: any) => g.slug === slug));
+    loadId(id: string) {
+        this.wine.set(structuredClone(this.allWines).find((g: any) => g.id === id));
     }
 }
