@@ -1,15 +1,15 @@
 import { Routes } from '@angular/router';
-import Tab3Page from './tab3.page';
-import RecipePage from './recipe/recipe.page';
+import TabWinesPage from './tab-wines.page';
+import WinePage from './wine/wine.page';
 
 export const routes: Routes = [
     {
         path: '',
-        component: Tab3Page,
+        component: TabWinesPage,
     },
     {
         path: ':slug',
-        component: RecipePage,
+        component: WinePage,
     },
 ];
 export default routes;

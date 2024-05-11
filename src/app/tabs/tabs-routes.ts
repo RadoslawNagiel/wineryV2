@@ -7,31 +7,31 @@ export const routes: Routes = [
         component: TabsPage,
         children: [
             {
-                path: `tab1`,
-                loadChildren: async () => import(`../tab1/tab1-routes`),
+                path: `tab-production`,
+                loadChildren: async () => import(`../tab-production/tab-production-routes`),
             },
             {
-                path: `tab2`,
-                loadChildren: async () => import(`../tab2/tab2-routes`),
+                path: `tab-wines`,
+                loadChildren: async () => import(`../tab-wines/tab-wines-routes`),
             },
             {
-                path: `tab3`,
-                loadChildren: async () => import(`../tab3/tab3-routes`),
+                path: `tab-recipes`,
+                loadChildren: async () => import(`../tab-recipes/tab-recipes-routes`),
             },
             {
-                path: `tab4`,
-                loadChildren: async () => import(`../tab4/tab4-routes`),
+                path: `tab-guides`,
+                loadChildren: async () => import(`../tab-guides/tab-guides-routes`),
             },
             {
                 path: ``,
-                redirectTo: `/tabs/tab1`,
+                redirectTo: `/tabs/tab-production`,
                 pathMatch: `full`,
             },
         ],
     },
     {
         path: ``,
-        redirectTo: `/tabs/tab1`,
+        redirectTo: `/tabs/tab-production`,
         pathMatch: `full`,
     },
 ];

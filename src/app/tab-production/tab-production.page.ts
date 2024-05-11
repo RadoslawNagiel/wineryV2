@@ -3,17 +3,17 @@ import { IonicModule } from '@ionic/angular';
 import { Wine } from '../../utils/interfaces';
 import { DatePipe } from '@angular/common';
 import { HeaderComponent } from '../../components/header/header.component';
-import { SearchPipe } from '../pipes/search.pipe';
+import { SearchPipe } from '../../pipes/search.pipe';
 import { NoDataComponent } from '../../components/no-data/no-data.component';
 
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: true,
-    selector: `app-tab1`,
-    templateUrl: `tab1.page.html`,
+    selector: `tab-production`,
+    templateUrl: `tab-production.page.html`,
     imports: [IonicModule, DatePipe, HeaderComponent, SearchPipe, NoDataComponent],
 })
-export default class Tab1Page {
+export default class TabProductionPage {
     searchValue = signal(``);
 
     wines = signal<Wine[]>([

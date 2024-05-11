@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { Router } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { Wine } from '../../../utils/interfaces';
+import { getSlug } from '../../../utils/get-slug';
 
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -18,12 +19,7 @@ export default class WinePage {
     allWines = [];
 
     ngOnInit() {
-        const urlTree = this.router.parseUrl(this.router.url);
-        const id = urlTree.root.children['primary'].segments
-            .map((it: any) => it.path)
-            .join('/')
-            .substring(10);
-        this.loadId(id);
+        this.loadId(getSlug(this.router.parseUrl(this.router.url)));
     }
 
     loadId(id: string) {

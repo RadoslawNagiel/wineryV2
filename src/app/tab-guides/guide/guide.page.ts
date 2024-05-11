@@ -5,6 +5,7 @@ import { GUIDES } from '../../../utils/guides';
 import { Calculators, Guide } from '../../../utils/interfaces';
 import { CalcBlgComponent } from '../../../components/calc-blg/calc-blg.component';
 import { CalcGlucoseSyrupComponent } from '../../../components/calc-glucose-syrup/calc-glucose-syrup.component';
+import { getSlug } from '../../../utils/get-slug';
 
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -21,12 +22,7 @@ export default class GuidePage {
     router = inject(Router);
 
     ngOnInit() {
-        const urlTree = this.router.parseUrl(this.router.url);
-        const slug = urlTree.root.children['primary'].segments
-            .map((it: any) => it.path)
-            .join('/')
-            .substring(10);
-        this.loadSlug(slug);
+        this.loadSlug(getSlug(this.router.parseUrl(this.router.url)));
     }
 
     loadSlug(slug: string) {

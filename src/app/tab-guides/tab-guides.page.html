@@ -3,7 +3,7 @@
 <ion-content [fullscreen]="true">
     @if ((guides() | search: {param: ['name', 'description'], search: searchValue()}); as guides) { @if (guides.length) { @for (guide of guides; track
     $index) {
-    <ion-card [routerLink]="'/tabs/tab4/' + guide.slug">
+    <ion-card [routerLink]="'/tabs/tab-guides/' + guide.slug">
         <ion-card-header>
             <ion-card-title>{{guide.name}}</ion-card-title>
         </ion-card-header>

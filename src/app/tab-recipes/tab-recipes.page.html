@@ -2,7 +2,7 @@
 
 <ion-content [fullscreen]="true">
     @if ((recipes() | search: {param: ['name'], search: searchValue()}); as recipes) { @if (recipes.length) { @for (recipe of recipes; track $index) {
-    <ion-card [routerLink]="'/tabs/tab3/' + recipe.slug">
+    <ion-card [routerLink]="'/tabs/tab-recipes/' + recipe.slug">
         <ion-card-header>
             <ion-card-title>{{recipe.name}}</ion-card-title>
         </ion-card-header>

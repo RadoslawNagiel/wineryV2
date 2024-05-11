@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { Recipe } from '../../../utils/interfaces';
 import { RECIPES } from '../../../utils/recipes';
+import { getSlug } from '../../../utils/get-slug';
 
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -17,12 +18,7 @@ export default class RecipePage {
     router = inject(Router);
 
     ngOnInit() {
-        const urlTree = this.router.parseUrl(this.router.url);
-        const slug = urlTree.root.children['primary'].segments
-            .map((it: any) => it.path)
-            .join('/')
-            .substring(10);
-        this.loadSlug(slug);
+        this.loadSlug(getSlug(this.router.parseUrl(this.router.url)));
     }
 
     loadSlug(slug: string) {
