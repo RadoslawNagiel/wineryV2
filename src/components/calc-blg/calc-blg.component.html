@@ -1,0 +1,27 @@
+<div class="frame w-full my-1">
+    <div class="border-b">Kalkulator Blg</div>
+    <div [ngClass]="onlyBlg ? 'container-2' : 'container'">
+        <div>
+            <ion-input class="text-center" min="0" type="number" [(ngModel)]="blg" (change)="changedBlgOrWeight()"></ion-input>
+        </div>
+        <div>Blg moszczu</div>
+        <ion-input class="text-center" min="0" type="number" [(ngModel)]="weight" (change)="changedBlgOrWeight()"></ion-input>
+        <div>g - waga litra roztworu</div>
+        @if (!onlyBlg) {
+            <div>
+                <div>
+                    <ion-input class="text-center" min="0" type="number" [(ngModel)]="power" (change)="changedPower()"></ion-input>
+                </div>
+            </div>
+            <div>% - moc</div>
+        }
+        <div>
+            <ion-input class="text-center" min="0" type="number" [(ngModel)]="sugar" disabled></ion-input>
+        </div>
+        <div>g - cukier w litrze</div>
+        @if (!onlyBlg) {
+            <ion-input class="text-center" min="0" type="number" [(ngModel)]="additionalSugar" disabled></ion-input>
+            <div>g - cukier do dodania na litr</div>
+        }
+    </div>
+</div>

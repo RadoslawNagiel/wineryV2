@@ -1,0 +1,10 @@
+<ion-header collapse="fade">
+    <ion-toolbar>
+        <ion-title>{{ header() }}</ion-title>
+    </ion-toolbar>
+    @if (search()) {
+        <ion-toolbar>
+            <ion-searchbar placeholder="Wyszukaj..." (ionInput)="searchChanged.next($event.target.value ?? '')"></ion-searchbar>
+        </ion-toolbar>
+    }
+</ion-header>

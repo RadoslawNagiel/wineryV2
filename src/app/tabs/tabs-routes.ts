@@ -19,6 +19,10 @@ export const routes: Routes = [
                 loadChildren: async () => import(`../tab3/tab3-routes`),
             },
             {
+                path: `tab4`,
+                loadChildren: async () => import(`../tab4/tab4-routes`),
+            },
+            {
                 path: ``,
                 redirectTo: `/tabs/tab1`,
                 pathMatch: `full`,

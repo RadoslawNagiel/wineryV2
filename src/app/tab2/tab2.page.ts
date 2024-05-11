@@ -1,12 +1,61 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { DatePipe } from '@angular/common';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
-import { ExploreContainerComponent } from '../explore-container/explore-container.component';
+import { Wine } from '../../utils/interfaces';
+import { SearchPipe } from '../pipes/search.pipe';
+import { HeaderComponent } from '../../components/header/header.component';
+import { NoDataComponent } from '../../components/no-data/no-data.component';
 
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: true,
-    imports: [IonicModule, ExploreContainerComponent],
     selector: `app-tab2`,
     templateUrl: `tab2.page.html`,
+    imports: [IonicModule, DatePipe, SearchPipe, HeaderComponent, NoDataComponent],
 })
-export default class Tab2Page {}
+export default class Tab2Page {
+    searchValue = signal(``);
+
+    wines = signal<Wine[]>([
+        {
+            id: Math.random.toString(),
+            name: `Wino gronowe`,
+            description: `Wino stworzone z winogron`,
+            createDate: new Date(),
+            capacity: 10,
+            power: 12,
+        },
+        {
+            id: Math.random.toString(),
+            name: `Wino gronowe`,
+            description: `Wino stworzone z winogron`,
+            createDate: new Date(),
+            capacity: 10,
+            power: 12,
+        },
+        {
+            id: Math.random.toString(),
+            name: `Wino gronowe`,
+            description: `Wino stworzone z winogron`,
+            createDate: new Date(),
+            capacity: 10,
+            power: 12,
+        },
+        {
+            id: Math.random.toString(),
+            name: `Wino gronowe`,
+            description: `Wino stworzone z winogron`,
+            createDate: new Date(),
+            capacity: 10,
+            power: 12,
+        },
+        {
+            id: Math.random.toString(),
+            name: `Wino gronowe`,
+            description: `Wino stworzone z winogron`,
+            createDate: new Date(),
+            capacity: 10,
+            power: 12,
+        },
+    ]);
+}

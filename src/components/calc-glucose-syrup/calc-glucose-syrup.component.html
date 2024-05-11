@@ -1,0 +1,32 @@
+<div class="frame w-full my-1">
+    <div class="border-b">Kalkulator syropu cukrowego</div>
+    <div class="container">
+        <div>cukier [kg]</div>
+        <div>płyn [litry]</div>
+        <div>syrop [litry]</div>
+        <div>
+            <ion-input
+                class="text-center"
+                [ngClass]="{ 'invalid-text': !valueValid }"
+                min="0"
+                type="number"
+                [disabled]="disableSugarEdit"
+                [(ngModel)]="sugarAmount"
+                (change)="changedSugarOrCapacity()"
+            ></ion-input>
+        </div>
+        <div>
+            <ion-input
+                class="text-center"
+                [ngClass]="{ 'invalid-text': !valueValid }"
+                min="0"
+                type="number"
+                [(ngModel)]="capacity"
+                (change)="changedSugarOrCapacity()"
+            ></ion-input>
+        </div>
+        <div>
+            <ion-input class="text-center" min="0" type="number" [(ngModel)]="glucoseSyrup" (change)="changedSyrup()"></ion-input>
+        </div>
+    </div>
+</div>
