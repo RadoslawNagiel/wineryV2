@@ -1,4 +1,4 @@
-import { Calculators, Guide } from '../utils/interfaces';
+import { Calculators, Guide } from '../interfaces';
 
 export const GUIDES: Guide[] = [
     {

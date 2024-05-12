@@ -23,6 +23,7 @@ export interface Ingredient {
 }
 
 export interface Recipe {
+    manualAdded?: boolean;
     slug: string;
     name: string;
     ingredients: Ingredient[];

@@ -4,7 +4,24 @@
     @if ((recipes() | search: {param: ['name'], search: searchValue()}); as recipes) { @if (recipes.length) { @for (recipe of recipes; track $index) {
     <ion-card [routerLink]="'/tabs/tab-recipes/' + recipe.slug">
         <ion-card-header>
-            <ion-card-title>{{recipe.name}}</ion-card-title>
+            <div class="flex justify-between">
+                <ion-card-title>{{recipe.name}}</ion-card-title>
+                @if (recipe.manualAdded) {
+                <div
+                    [id]="'present-alert-'+$index"
+                    class="flex justify-center items-center size-12 -m-4"
+                    (click)="$event.preventDefault(); $event.stopPropagation()"
+                >
+                    <ion-icon name="trash-outline"></ion-icon>
+                </div>
+                <ion-alert
+                    [trigger]="'present-alert-'+$index"
+                    [header]="'Czy na pewno chcesz usunąć ' + recipe.name + '?'"
+                    [buttons]="alertButtons"
+                    (didDismiss)="setResult($event, recipe.slug)"
+                ></ion-alert>
+                }
+            </div>
         </ion-card-header>
         <ion-card-content>
             Składniki na 10 litrów:

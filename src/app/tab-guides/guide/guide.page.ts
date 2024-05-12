@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
-import { GUIDES } from '../../../utils/guides';
+import { GUIDES } from '../../../utils/variables/guides';
 import { Calculators, Guide } from '../../../utils/interfaces';
 import { CalcBlgComponent } from '../../../components/calc-blg/calc-blg.component';
 import { CalcGlucoseSyrupComponent } from '../../../components/calc-glucose-syrup/calc-glucose-syrup.component';

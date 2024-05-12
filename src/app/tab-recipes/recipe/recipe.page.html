@@ -5,7 +5,22 @@
         </ion-buttons>
         @if(recipe(); as recipe){
         <ion-title>{{recipe.name}}</ion-title>
-        }
+        @if(recipe.manualAdded){
+        <div
+            slot="end"
+            [id]="'present-alert'"
+            class="flex justify-center items-center size-12 mr-1"
+            (click)="$event.preventDefault(); $event.stopPropagation()"
+        >
+            <ion-icon name="trash-outline"></ion-icon>
+        </div>
+        <ion-alert
+            [trigger]="'present-alert'"
+            [header]="'Czy na pewno chcesz usunąć ' + recipe.name + '?'"
+            [buttons]="alertButtons"
+            (didDismiss)="setResult($event, recipe.slug)"
+        ></ion-alert>
+        } }
     </ion-toolbar>
 </ion-header>
 
@@ -23,7 +38,7 @@
     @for (stage of recipe.productStages; track $index) {
     <ion-card class="mx-0">
         <ion-card-header>
-            <ion-card-title>Dzień {{ stage.date / 86400000 }}: {{ stage.name }}</ion-card-title>
+            <ion-card-title>Dzień {{ stage.date / 86400000 + 1 }}: {{ stage.name }}</ion-card-title>
         </ion-card-header>
 
         <ion-card-content> {{stage.description}} </ion-card-content>

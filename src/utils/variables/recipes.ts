@@ -1,4 +1,4 @@
-import { ProductionStage, Recipe, Units } from '../utils/interfaces';
+import { ProductionStage, Recipe, Units } from '../interfaces';
 
 export const RECIPES: Recipe[] = [
     {

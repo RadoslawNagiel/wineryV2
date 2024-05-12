@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { HeaderComponent } from '../../components/header/header.component';
-import { GUIDES } from '../../utils/guides';
+import { GUIDES } from '../../utils/variables/guides';
 import { Guide } from '../../utils/interfaces';
 import { SearchPipe } from '../../utils/pipes/search.pipe';
 import { NoDataComponent } from '../../components/no-data/no-data.component';

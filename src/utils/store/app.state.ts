@@ -50,7 +50,7 @@ export class AppState {
         const index = state.wines.findIndex((el) => el.id === action.id);
         if (index !== -1) {
             state.wines.splice(index, 1);
-            ctx.setState(state);
+            ctx.setState(structuredClone(state));
         }
         localStorage.setItem(`state`, JSON.stringify(ctx.getState()));
     }
@@ -83,7 +83,7 @@ export class AppState {
         const index = state.recipes.findIndex((el) => el.slug === action.slug);
         if (index !== -1) {
             state.recipes.splice(index, 1);
-            ctx.setState(state);
+            ctx.setState(structuredClone(state));
         }
         localStorage.setItem(`state`, JSON.stringify(ctx.getState()));
     }
