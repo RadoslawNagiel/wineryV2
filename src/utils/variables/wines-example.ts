@@ -12,6 +12,7 @@ export const WINES_EXAMPLE: Wine[] = [
         recipe: RECIPES[0],
         yeast: `Drożdże 18% amprio`,
         imageBase64: `/assets/example-wine.jpg`,
+        numberOfBottles: 20,
     },
     {
         id: Math.random().toString(),
@@ -22,6 +23,7 @@ export const WINES_EXAMPLE: Wine[] = [
         power: 12,
         recipe: RECIPES[1],
         yeast: `Drożdże 18% amprio`,
+        numberOfBottles: 10,
     },
     {
         id: Math.random().toString(),

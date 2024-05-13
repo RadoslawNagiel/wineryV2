@@ -13,14 +13,14 @@
     @if(wine(); as wine){
     <div class="flex flex-col gap-4">
         <div
-            class="relative border-dashed"
+            class="relative border-dashed rounded-lg overflow-hidden"
             [ngClass]="{'border-4 border-neutral-300 bg-neutral-500': !wine.imageBase64}"
             (click)="imageHolderClicked()"
         >
             <image-holder
                 [url]="wine.imageBase64 ?? 'assets/example-wine.jpg'"
                 [ratio]="wine.imageBase64 ? 3/4 : 2/1"
-                [ngClass]="{'grayscale opacity-40': !wine.imageBase64}"
+                [ngClass]="{'grayscale opacity-60': !wine.imageBase64}"
             />
             @if (!wine.imageBase64) {
             <ion-icon class="absolute inset-0 m-auto text-neutral-300 shadow-2xl size-20" name="camera-outline" />

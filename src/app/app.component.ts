@@ -3,6 +3,7 @@ import { IonicModule } from '@ionic/angular';
 import { ThemeService } from '../utils/services/theme.service';
 import { ComponentBase } from '../utils/classes/component.base';
 import { SetStore } from '../utils/store/app.actions';
+import { addPolishWords } from '../utils/add-polish-words';
 
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -20,5 +21,6 @@ export class AppComponent extends ComponentBase {
         if (state) {
             this.store.dispatch(new SetStore(JSON.parse(state)));
         }
+        addPolishWords();
     }
 }

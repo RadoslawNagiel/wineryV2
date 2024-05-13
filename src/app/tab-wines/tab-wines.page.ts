@@ -8,6 +8,7 @@ import { NoDataComponent } from '../../components/no-data/no-data.component';
 import { RouterLink } from '@angular/router';
 import { ImageHolderComponent } from '../../components/image-holder/image-holder.component';
 import { WINES_EXAMPLE } from '../../utils/variables/wines-example';
+import { wordVariations } from 'polish-word-variations';
 
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -17,6 +18,8 @@ import { WINES_EXAMPLE } from '../../utils/variables/wines-example';
     imports: [IonicModule, DatePipe, SearchPipe, HeaderComponent, NoDataComponent, RouterLink, ImageHolderComponent, NgClass],
 })
 export default class TabWinesPage {
+    readonly wordVariations = wordVariations;
+
     searchValue = signal(``);
 
     wines = signal<Wine[]>(structuredClone(WINES_EXAMPLE));

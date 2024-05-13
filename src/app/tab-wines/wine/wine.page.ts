@@ -75,14 +75,14 @@ export default class WinePage extends ComponentBase {
     async takePhoto() {
         const image = await Camera.getPhoto({
             quality: 90,
-            resultType: CameraResultType.Uri,
+            resultType: CameraResultType.Base64,
             width: 1200,
             height: 1600,
         });
         const wine = this.wine();
         if (wine) {
-            wine.imageBase64 = image.webPath ?? ``;
-            this.wine.set(wine);
+            wine.imageBase64 = `data:image/jpeg;base64,${image.base64String}` ?? ``;
+            this.wine.set(structuredClone(wine));
             this.store.dispatch(new UpdateWine(wine, wine.id));
         }
     }

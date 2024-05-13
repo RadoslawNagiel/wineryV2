@@ -23,6 +23,7 @@
         "@ionic/angular": "^8.0.0",
         "@ngxs/store": "^3.8.2",
         "ionicons": "^7.0.0",
+        "polish-word-variations": "^2.0.42",
         "rxjs": "~7.8.0",
         "subsink": "^1.0.2",
         "tslib": "^2.3.0",
