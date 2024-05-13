@@ -23,6 +23,14 @@ export class RemoveWine {
     constructor(public id: string) {}
 }
 
+export class UpdateWine {
+    static readonly type = '[App] Update Wine';
+    constructor(
+        public wine: Wine,
+        public id: string,
+    ) {}
+}
+
 // RECIPE
 
 export class SetRecipes {

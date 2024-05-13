@@ -1,7 +1,7 @@
 <ion-header collapse="fade">
     <ion-toolbar>
         <ion-buttons slot="start">
-            <ion-back-button text="" defaultHref="/tabs/tab-wines"></ion-back-button>
+            <ion-back-button text="" defaultHref="/tabs/tab-wines" />
         </ion-buttons>
         @if(wine(); as wine){
         <ion-title>{{wine.name}}</ion-title>
@@ -9,4 +9,72 @@
     </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-padding"> </ion-content>
+<ion-content [fullscreen]="true" class="ion-padding">
+    @if(wine(); as wine){
+    <div class="flex flex-col gap-4">
+        <div
+            class="relative border-dashed"
+            [ngClass]="{'border-4 border-neutral-300 bg-neutral-500': !wine.imageBase64}"
+            (click)="imageHolderClicked()"
+        >
+            <image-holder
+                [url]="wine.imageBase64 ?? 'assets/example-wine.jpg'"
+                [ratio]="wine.imageBase64 ? 3/4 : 2/1"
+                [ngClass]="{'grayscale opacity-40': !wine.imageBase64}"
+            />
+            @if (!wine.imageBase64) {
+            <ion-icon class="absolute inset-0 m-auto text-neutral-300 shadow-2xl size-20" name="camera-outline" />
+            } @if (wine.imageBase64) {
+            <div
+                class="bg-neutral-800 absolute bottom-4 right-4 rounded-full size-12 flex justify-center items-center opacity-70"
+                (click)="takePhoto()"
+            >
+                <ion-icon class="text-white shadow-2xl size-8" name="camera-outline"></ion-icon>
+            </div>
+            }
+        </div>
+
+        <ion-list class="py-0 my-2">
+            <ion-item>
+                <ion-label> Liczba butelek </ion-label>
+                <div slot="end" class="flex gap-2 items-center w-32">
+                    <ion-fab-button class="size-8" style="min-width: 32px" (click)="addBottle(-1)">
+                        <ion-icon class="size-5" name="remove-outline"></ion-icon>
+                    </ion-fab-button>
+                    <ion-input class="text-center" placeholder="Liczba" type="number" min="0" [value]="wine.numberOfBottles ?? 0"></ion-input>
+                    <ion-fab-button class="size-8" style="min-width: 32px" (click)="addBottle(1)">
+                        <ion-icon class="size-5" name="add-outline"></ion-icon>
+                    </ion-fab-button>
+                </div>
+            </ion-item>
+
+            @for (parameter of parameters; track $index) {
+            <ion-item [lines]="$index === parameters.length -1 ? 'none' : ''">
+                <ion-label> {{parameter.label}} </ion-label>
+                <ion-text slot="end" class="truncate"
+                    >{{parameter.format ? parameter.format($any(wine)[parameter.key]) : $any(wine)[parameter.key]}}</ion-text
+                >
+            </ion-item>
+            }
+        </ion-list>
+        <div>
+            <ion-card-title>Składniki</ion-card-title>
+            <ion-list class="py-0 my-2">
+                @if (wine.recipe?.ingredients?.length; as ingredientsLength) { @for (ingredient of wine.recipe?.ingredients ?? []; track $index) {
+                <ion-item [lines]="$index === ingredientsLength -1 ? 'none' : ''">
+                    {{ingredient.name}} - {{ingredient.value}} {{ingredient.unit}}
+                </ion-item>
+                } }
+            </ion-list>
+        </div>
+        <div>
+            <ion-card-title>Etapy produkcjiniki</ion-card-title>
+            <ion-list class="py-0 my-2">
+                @if (wine.recipe?.productStages?.length; as ingredientsLength) { @for (ingredient of wine.recipe?.productStages ?? []; track $index) {
+                <ion-item [lines]="$index === ingredientsLength -1 ? 'none' : ''"> {{ingredient.name}} </ion-item>
+                } }
+            </ion-list>
+        </div>
+    </div>
+    }
+</ion-content>

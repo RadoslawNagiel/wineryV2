@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { State, Action, StateContext } from '@ngxs/store';
 import { Recipe, Wine } from '../interfaces';
-import { AddRecipe, AddWine, RemoveRecipe, RemoveWine, SetRecipes, SetStore, SetWines } from './app.actions';
+import { AddRecipe, AddWine, RemoveRecipe, RemoveWine, SetRecipes, SetStore, SetWines, UpdateWine } from './app.actions';
 
 export interface AppStateModel {
     wines: Wine[];
@@ -50,6 +50,17 @@ export class AppState {
         const index = state.wines.findIndex((el) => el.id === action.id);
         if (index !== -1) {
             state.wines.splice(index, 1);
+            ctx.setState(structuredClone(state));
+        }
+        localStorage.setItem(`state`, JSON.stringify(ctx.getState()));
+    }
+
+    @Action(UpdateWine)
+    updateWine(ctx: StateContext<AppStateModel>, action: UpdateWine) {
+        const state = ctx.getState();
+        const index = state.wines.findIndex((el) => el.id === action.id);
+        if (index !== -1) {
+            state.wines[index] = action.wine;
             ctx.setState(structuredClone(state));
         }
         localStorage.setItem(`state`, JSON.stringify(ctx.getState()));

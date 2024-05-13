@@ -1,17 +1,18 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { Wine } from '../../utils/interfaces';
-import { DatePipe } from '@angular/common';
+import { DatePipe, NgClass } from '@angular/common';
 import { HeaderComponent } from '../../components/header/header.component';
 import { SearchPipe } from '../../utils/pipes/search.pipe';
 import { NoDataComponent } from '../../components/no-data/no-data.component';
+import { ImageHolderComponent } from '../../components/image-holder/image-holder.component';
 
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: true,
     selector: `tab-production`,
     templateUrl: `tab-production.page.html`,
-    imports: [IonicModule, DatePipe, HeaderComponent, SearchPipe, NoDataComponent],
+    imports: [IonicModule, DatePipe, HeaderComponent, SearchPipe, NoDataComponent, ImageHolderComponent, NgClass],
 })
 export default class TabProductionPage {
     searchValue = signal(``);

@@ -28,12 +28,9 @@ export default class RecipePage extends ComponentBase {
             .select((state) => state.app.recipes)
             .subscribe((recipes) => {
                 this.recipes.set(getRecipesDetail(structuredClone(recipes)));
-                this.loadSlug(getSlug(this.router.parseUrl(this.router.url)));
+                const slug = getSlug(this.router.parseUrl(this.router.url));
+                this.recipe.set(structuredClone(this.recipes()).find((g: any) => g.slug === slug));
             });
-    }
-
-    loadSlug(slug: string) {
-        this.recipe.set(structuredClone(this.recipes()).find((g: any) => g.slug === slug));
     }
 
     setResult(ev: any, slug: string) {
