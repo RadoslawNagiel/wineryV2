@@ -41,7 +41,15 @@
             <ion-card-title>Dzień {{ stage.date / 86400000 + 1 }}: {{ stage.name }}</ion-card-title>
         </ion-card-header>
 
-        <ion-card-content> {{stage.description}} </ion-card-content>
+        <ion-card-content>
+            <div class="whitespace-pre-wrap" [innerHTML]="stage.description"></div>
+        </ion-card-content>
     </ion-card>
     } }
 </ion-content>
+
+<ion-footer>
+    <ion-toolbar>
+        <ion-button class="w-full ion-padding-horizontal" size="large" (click)="addWine()">Stwórz wino</ion-button>
+    </ion-toolbar>
+</ion-footer>

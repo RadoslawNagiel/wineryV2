@@ -1,0 +1,16 @@
+<ion-header collapse="fade">
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button text="" defaultHref="/tabs/tab-production/add-wine"></ion-back-button>
+        </ion-buttons>
+        <ion-title>Nowe wino</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding"> </ion-content>
+
+<ion-footer>
+    <ion-toolbar>
+        <ion-button class="w-full ion-padding-horizontal" size="large" [disabled]="!form.valid">Dalej</ion-button>
+    </ion-toolbar>
+</ion-footer>

@@ -39,4 +39,12 @@ export default class RecipePage extends ComponentBase {
             this.router.navigate([`/tabs/tab-recipes`]);
         }
     }
+
+    addWine() {
+        this.router.navigate([`/tabs/tab-production/add-wine/detail`], {
+            queryParams: {
+                recipe: structuredClone(this.recipe()),
+            },
+        });
+    }
 }

@@ -19,7 +19,11 @@ export const getRecipesDetail = (recipes: Recipe[]) => {
 export const getStageDescription = (stageName: ProductionStage, preparationDescription?: string) => {
     let description = structuredClone(PRODUCT_STAGES_DESCRIPTIONS).find((description) => description.name === stageName)?.description ?? ``;
     if (stageName === ProductionStage.Preparation) {
-        description = preparationDescription + ` ` + description;
+        description =
+            preparationDescription +
+            `
+` +
+            description;
     }
     if (stageName === ProductionStage.StopFermentation) {
         const stageDesc = structuredClone(PRODUCT_STAGES_DESCRIPTIONS).find((desc) => desc.name === stageName)?.descriptions?.[2] ?? ``;

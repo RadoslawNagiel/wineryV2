@@ -58,6 +58,16 @@
             }
         </ion-list>
         <div>
+            <ion-card-title>Opis</ion-card-title>
+            <ion-textarea
+                class="pl-4"
+                [value]="wine.description"
+                [autoGrow]="true"
+                placeholder="Opis..."
+                (ionChange)="editDescription($event.detail.value ?? '')"
+            ></ion-textarea>
+        </div>
+        <div>
             <ion-card-title>Składniki</ion-card-title>
             <ion-list class="py-0 my-2">
                 @if (wine.recipe?.ingredients?.length; as ingredientsLength) { @for (ingredient of wine.recipe?.ingredients ?? []; track $index) {

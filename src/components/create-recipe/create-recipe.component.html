@@ -1,0 +1,64 @@
+<form [formGroup]="form" class="flex flex-col gap-4">
+    <ion-input label="Nazwa" labelPlacement="floating" [counter]="true" maxlength="40" formControlName="name"></ion-input>
+
+    <div>
+        Składniki
+        <ion-list class="py-0 my-2">
+            <ion-item>
+                <div class="flex items-center gap-2">
+                    <ion-input
+                        placeholder="Nazwa"
+                        class="w-1/2"
+                        maxlength="40"
+                        [(ngModel)]="ingredientName"
+                        [ngModelOptions]="{ standalone: true }"
+                    ></ion-input>
+                    <ion-input
+                        placeholder="Liczba"
+                        type="number"
+                        min="0"
+                        class="w-1/4"
+                        [(ngModel)]="ingredientAmount"
+                        [ngModelOptions]="{ standalone: true }"
+                    ></ion-input>
+                    <ion-select
+                        class="w-1/4"
+                        placeholder="Jednostka"
+                        okText="Potwierdź"
+                        cancelText="Anuluj"
+                        [(ngModel)]="ingredientUnit"
+                        [ngModelOptions]="{ standalone: true }"
+                    >
+                        <ion-select-option [value]="Units.gramy">Gramy</ion-select-option>
+                        <ion-select-option [value]="Units.litry">Litry</ion-select-option>
+                        <ion-select-option [value]="Units.sztuki">Sztuki</ion-select-option>
+                    </ion-select>
+                    <ion-fab-button size="small" color="warning" style="min-width: 40px" [disabled]="!canAddIngredient()" (click)="plusClick()">
+                        <ion-icon name="add"></ion-icon>
+                    </ion-fab-button>
+                </div>
+            </ion-item>
+            @if (form.value.ingredients; as ingredients) {
+                @for (ingredient of ingredients; track $index) {
+                    <ion-item>
+                        <div class="w-full flex justify-between items-center">
+                            <div>{{ ingredient.name }} - {{ ingredient.value }} {{ ingredient.unit }}</div>
+                            <ion-fab-button size="small" color="danger" style="min-width: 40px" (click)="minusClick($index)">
+                                <ion-icon name="remove"></ion-icon>
+                            </ion-fab-button>
+                        </div>
+                    </ion-item>
+                }
+            }
+        </ion-list>
+    </div>
+
+    <ion-textarea
+        label="Przygotowanie moszczu"
+        labelPlacement="floating"
+        helperText="Opisz proces przygotowywania moszczu. Powinien on zawierać proces przygotowywania wymienionych przez Ciebie składników."
+        formControlName="description"
+        [rows]="5"
+    >
+    </ion-textarea>
+</form>

@@ -1,9 +1,9 @@
 <ion-header collapse="fade">
     <ion-toolbar>
         <ion-buttons slot="start">
-            <ion-back-button text="" defaultHref="/tabs/tab-recipes"></ion-back-button>
+            <ion-back-button text="" defaultHref="/tabs/tab-production"></ion-back-button>
         </ion-buttons>
-        <ion-title>Nowy przepis</ion-title>
+        <ion-title>Nowe wino</ion-title>
     </ion-toolbar>
 </ion-header>
 
@@ -13,6 +13,6 @@
 
 <ion-footer>
     <ion-toolbar>
-        <ion-button class="w-full ion-padding-horizontal" size="large" [disabled]="!form.valid" (click)="addRecipe()">Dodaj</ion-button>
+        <ion-button class="w-full ion-padding-horizontal" size="large" [disabled]="!form.valid" (click)="next()">Dalej</ion-button>
     </ion-toolbar>
 </ion-footer>

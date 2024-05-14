@@ -1,21 +1,20 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { IonicModule } from '@ionic/angular';
-import { Ingredient, ProductStage, ProductionStage, Recipe, Units } from '../../../utils/interfaces';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ComponentBase } from '../../../utils/classes/component.base';
-import { AddRecipe } from '../../../utils/store/app.actions';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { slugify } from '../../../utils/slugify';
+import { IonicModule } from '@ionic/angular';
+import { ComponentBase } from '../../../utils/classes/component.base';
+import { Ingredient, ProductionStage, Recipe } from '../../../utils/interfaces';
 import { CreateRecipeComponent } from '../../../components/create-recipe/create-recipe.component';
+import { slugify } from '../../../utils/slugify';
 
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: true,
-    selector: `add-recipe`,
-    templateUrl: `add-recipe.page.html`,
+    selector: `add-wine`,
+    templateUrl: `add-wine.page.html`,
     imports: [IonicModule, CreateRecipeComponent],
 })
-export default class AddRecipePage extends ComponentBase {
+export default class AddWinePage extends ComponentBase {
     form = new FormGroup({
         name: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(40)]),
         description: new FormControl<string | null>(null, [Validators.required]),
@@ -24,7 +23,7 @@ export default class AddRecipePage extends ComponentBase {
 
     router = inject(Router);
 
-    addRecipe() {
+    next() {
         const recipe: Recipe = {
             slug: slugify(this.form.value.name ?? ``),
             name: this.form.value.name ?? ``,
@@ -37,7 +36,10 @@ export default class AddRecipePage extends ComponentBase {
                 },
             ],
         };
-        this.store.dispatch(new AddRecipe(recipe));
-        this.router.navigate([`/tabs/tab-recipes`]);
+        this.router.navigate([`/tabs/tab-production/add-wine/detail`], {
+            queryParams: {
+                recipe,
+            },
+        });
     }
 }

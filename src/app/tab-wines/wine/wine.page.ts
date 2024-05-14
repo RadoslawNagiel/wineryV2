@@ -72,6 +72,15 @@ export default class WinePage extends ComponentBase {
         }
     }
 
+    editDescription(description: string) {
+        const wine = this.wine();
+        if (wine) {
+            wine.description = description;
+            this.wine.set(wine);
+            this.store.dispatch(new UpdateWine(wine, wine.id));
+        }
+    }
+
     async takePhoto() {
         const image = await Camera.getPhoto({
             quality: 90,
