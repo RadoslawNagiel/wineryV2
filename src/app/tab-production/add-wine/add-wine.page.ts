@@ -1,11 +1,12 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, ToastController } from '@ionic/angular';
 import { ComponentBase } from '../../../utils/classes/component.base';
 import { Ingredient, ProductionStage, Recipe } from '../../../utils/interfaces';
 import { CreateRecipeComponent } from '../../../components/create-recipe/create-recipe.component';
 import { slugify } from '../../../utils/slugify';
+import { Keyboard } from '@capacitor/keyboard';
 
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -22,6 +23,63 @@ export default class AddWinePage extends ComponentBase {
     });
 
     router = inject(Router);
+    toastController = inject(ToastController);
+
+    toastDisplayed = signal(false);
+
+    ngOnInit() {
+        Keyboard.removeAllListeners();
+        Keyboard.addListener(`keyboardDidShow`, () => {
+            this.dismissHintToast();
+        });
+    }
+
+    override ngOnDestroy(): void {
+        super.ngOnDestroy();
+        Keyboard.removeAllListeners();
+    }
+
+    ionViewWillEnter() {
+        this.presentHintToast();
+    }
+
+    ionViewWillLeave() {
+        this.dismissHintToast();
+    }
+
+    async presentHintToast() {
+        if (this.toastDisplayed()) {
+            return;
+        }
+        this.toastDisplayed.set(true);
+        const toast = await this.toastController.create({
+            position: `top`,
+            message: `Możesz też wybrać gotowy przepis`,
+            animated: true,
+            buttons: [
+                {
+                    text: `Przejdź`,
+                    role: `Continue`,
+                    handler: () => {
+                        this.router.navigate([`/tabs/tab-recipes`]);
+                    },
+                },
+            ],
+            swipeGesture: `vertical`,
+            mode: `ios`,
+            duration: 10000,
+        });
+        void toast.onDidDismiss().then(() => {
+            this.toastDisplayed.set(false);
+        });
+        toast.present();
+    }
+
+    dismissHintToast() {
+        if (this.toastDisplayed()) {
+            this.toastController.dismiss();
+        }
+    }
 
     next() {
         const recipe: Recipe = {
@@ -38,7 +96,7 @@ export default class AddWinePage extends ComponentBase {
         };
         this.router.navigate([`/tabs/tab-production/add-wine/detail`], {
             queryParams: {
-                recipe,
+                recipe: JSON.stringify(recipe),
             },
         });
     }

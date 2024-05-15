@@ -13,12 +13,12 @@ import { ALERT_REMOVE_BUTTONS } from '../../../utils/variables/alert-remove-butt
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: true,
-    selector: `wine`,
-    templateUrl: `wine.page.html`,
+    selector: `wine-in-progress`,
+    templateUrl: `wine-in-progress.page.html`,
     imports: [IonicModule, ImageHolderComponent, NgClass],
     providers: [DatePipe],
 })
-export default class WinePage extends ComponentBase {
+export default class WineInProgressPage extends ComponentBase {
     readonly alertButtons = structuredClone(ALERT_REMOVE_BUTTONS);
 
     wines = signal<Wine[]>([]);
@@ -33,9 +33,9 @@ export default class WinePage extends ComponentBase {
         format?: (value: any) => any;
     }[] = [
         {
-            label: `Rocznik`,
+            label: `Data utworzenia`,
             key: `createDate`,
-            format: (value: Date) => this.datePipe.transform(value, `YYYY`),
+            format: (value: Date) => this.datePipe.transform(value, `dd-MM-YYYY`),
         },
         {
             label: `Moc`,
@@ -61,16 +61,6 @@ export default class WinePage extends ComponentBase {
     imageHolderClicked() {
         if (!this.wine()?.imageBase64) {
             this.takePhoto();
-        }
-    }
-
-    addBottle(amount: number) {
-        const wine = this.wine();
-        const numberOfBottles = (wine?.numberOfBottles ?? 0) + amount;
-        if (wine && numberOfBottles >= 0) {
-            wine.numberOfBottles = numberOfBottles;
-            this.wine.set(wine);
-            this.store.dispatch(new UpdateWine(wine, wine.id));
         }
     }
 
@@ -101,7 +91,7 @@ export default class WinePage extends ComponentBase {
     setResult(ev: any, id: string) {
         if (ev.detail.role === `confirm`) {
             this.store.dispatch(new RemoveWine(id));
-            this.router.navigate([`/tabs/tab-wines`]);
+            this.router.navigate([`/tabs/tab-production`]);
         }
     }
 }

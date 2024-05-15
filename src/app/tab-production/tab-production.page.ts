@@ -7,6 +7,7 @@ import { ImageHolderComponent } from '../../components/image-holder/image-holder
 import { NoDataComponent } from '../../components/no-data/no-data.component';
 import { Wine } from '../../utils/interfaces';
 import { SearchPipe } from '../../utils/pipes/search.pipe';
+import { ComponentBase } from '../../utils/classes/component.base';
 
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -15,49 +16,14 @@ import { SearchPipe } from '../../utils/pipes/search.pipe';
     templateUrl: `tab-production.page.html`,
     imports: [IonicModule, DatePipe, HeaderComponent, SearchPipe, NoDataComponent, ImageHolderComponent, NgClass, RouterLink],
 })
-export default class TabProductionPage {
-    searchValue = signal(``);
+export default class TabProductionPage extends ComponentBase {
+    wines = signal<Wine[]>([]);
 
-    wines = signal<Wine[]>([
-        {
-            id: Math.random.toString(),
-            name: `Wino gronowe`,
-            description: `Rozkoszuj się bogactwem natury w każdym kieliszku tego doskonałego wina winogronowego. Jego złocista barwa przyciąga uwagę, jak promienie słońca w złotej godzinie. Głęboki aromat świeżych winogron wita Cię od pierwszego wdechu, otwierając drzwi do krainy pełnej owocowych nut i delikatnych kwiatowych akcentów. Smak tego wina jest pełen harmonii - od subtelnej słodyczy po wyważoną kwasowość, każdy łyk jest niczym podróż po smakowych zaułkach winnicy. Zakończenie jest eleganckie i długotrwałe, zostawiając na podniebieniu delikatne nuty owocowych esencji, które pragniesz ponownie odkryć. To wino, które nie tylko zachwyca zmysły, ale również przenosi Cię w podróż przez piękno i bogactwo winiarskiego rzemiosła.`,
-            createDate: new Date(),
-            capacity: 10,
-            power: 12,
-        },
-        {
-            id: Math.random.toString(),
-            name: `Wino gronowe`,
-            description: `Rozkoszuj się bogactwem natury w każdym kieliszku tego doskonałego wina winogronowego. Jego złocista barwa przyciąga uwagę, jak promienie słońca w złotej godzinie. Głęboki aromat świeżych winogron wita Cię od pierwszego wdechu, otwierając drzwi do krainy pełnej owocowych nut i delikatnych kwiatowych akcentów. Smak tego wina jest pełen harmonii - od subtelnej słodyczy po wyważoną kwasowość, każdy łyk jest niczym podróż po smakowych zaułkach winnicy. Zakończenie jest eleganckie i długotrwałe, zostawiając na podniebieniu delikatne nuty owocowych esencji, które pragniesz ponownie odkryć. To wino, które nie tylko zachwyca zmysły, ale również przenosi Cię w podróż przez piękno i bogactwo winiarskiego rzemiosła.`,
-            createDate: new Date(),
-            capacity: 10,
-            power: 12,
-        },
-        {
-            id: Math.random.toString(),
-            name: `Wino gronowe`,
-            description: `Rozkoszuj się bogactwem natury w każdym kieliszku tego doskonałego wina winogronowego. Jego złocista barwa przyciąga uwagę, jak promienie słońca w złotej godzinie. Głęboki aromat świeżych winogron wita Cię od pierwszego wdechu, otwierając drzwi do krainy pełnej owocowych nut i delikatnych kwiatowych akcentów. Smak tego wina jest pełen harmonii - od subtelnej słodyczy po wyważoną kwasowość, każdy łyk jest niczym podróż po smakowych zaułkach winnicy. Zakończenie jest eleganckie i długotrwałe, zostawiając na podniebieniu delikatne nuty owocowych esencji, które pragniesz ponownie odkryć. To wino, które nie tylko zachwyca zmysły, ale również przenosi Cię w podróż przez piękno i bogactwo winiarskiego rzemiosła.`,
-            createDate: new Date(),
-            capacity: 10,
-            power: 12,
-        },
-        {
-            id: Math.random.toString(),
-            name: `Wino gronowe`,
-            description: `Wino stworzone z winogron`,
-            createDate: new Date(),
-            capacity: 10,
-            power: 12,
-        },
-        {
-            id: Math.random.toString(),
-            name: `Wino gronowe`,
-            description: `Wino stworzone z winogron`,
-            createDate: new Date(),
-            capacity: 10,
-            power: 12,
-        },
-    ]);
+    ngOnInit() {
+        this.subs.sink = this.store
+            .select((state) => state.app.wines)
+            .subscribe((wines) => {
+                this.wines.set(structuredClone(wines).filter((el: Wine) => !el.done));
+            });
+    }
 }

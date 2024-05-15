@@ -21,7 +21,7 @@ export default class RecipePage extends ComponentBase {
 
     router = inject(Router);
 
-    alertButtons = structuredClone(ALERT_REMOVE_BUTTONS);
+    readonly alertButtons = structuredClone(ALERT_REMOVE_BUTTONS);
 
     ngOnInit() {
         this.subs.sink = this.store
@@ -43,7 +43,7 @@ export default class RecipePage extends ComponentBase {
     addWine() {
         this.router.navigate([`/tabs/tab-production/add-wine/detail`], {
             queryParams: {
-                recipe: structuredClone(this.recipe()),
+                recipe: JSON.stringify(structuredClone(this.recipe())),
             },
         });
     }

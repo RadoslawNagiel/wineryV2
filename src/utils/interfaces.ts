@@ -7,7 +7,6 @@ export interface Wine {
     power: number;
     yeast?: string;
     yeastTolerance?: number;
-    sweetness?: Sweetness;
     startSugar?: number;
     recipe?: Recipe;
     done?: boolean;
@@ -63,13 +62,6 @@ export enum ProductionStage {
     Drainage = `Zlewanie znad osadu`,
     StopFermentation = `Przerwanie fermentacji`,
     Bottling = `Butelkowanie`,
-}
-
-export enum Sweetness {
-    Wytrawne,
-    Półwytrawne,
-    Półsłodkie,
-    Słodkie,
 }
 
 export enum Units {

@@ -3,7 +3,7 @@
 <ion-content [fullscreen]="true">
     @if ((wines() | search: {param: ['name', 'description'], search: searchValue()}); as wines) { @if (wines.length) { @for (wine of wines; track
     $index) {
-    <ion-card>
+    <ion-card [routerLink]="'/tabs/tab-production/' + wine.id">
         <image-holder
             [url]="wine.imageBase64 ?? 'assets/example-wine.jpg'"
             [ratio]="2/1"

@@ -1,7 +1,8 @@
 import { Routes } from '@angular/router';
 import TabProductionPage from './tab-production.page';
 import AddWinePage from './add-wine/add-wine.page';
-import DetailPage from './detail/detail.page';
+import DetailPage from './add-wine/detail/detail.page';
+import WineInProgressPage from './wine-in-progress/wine-in-progress.page';
 
 export const routes: Routes = [
     {
@@ -15,6 +16,10 @@ export const routes: Routes = [
     {
         path: 'add-wine/detail',
         component: DetailPage,
+    },
+    {
+        path: ':slug',
+        component: WineInProgressPage,
     },
 ];
 export default routes;

@@ -20,6 +20,7 @@
         "@capacitor/android": "^6.0.0",
         "@capacitor/camera": "^6.0.0",
         "@capacitor/core": "^6.0.0",
+        "@capacitor/keyboard": "^6.0.0",
         "@ionic/angular": "^8.0.0",
         "@ngxs/store": "^3.8.2",
         "ionicons": "^7.0.0",
