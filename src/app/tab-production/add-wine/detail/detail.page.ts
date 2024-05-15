@@ -24,7 +24,7 @@ export default class DetailPage extends ComponentBase {
     readonly form = new FormGroup({
         name: new FormControl<string>(``, [Validators.required, Validators.maxLength(40)]),
         date: new FormControl<string>(this.datePipe.transform(new Date(), `YYYY-MM-dd`) ?? ``, [Validators.required]),
-        capacity: new FormControl<number | null>(null, [Validators.required]),
+        capacity: new FormControl<number | null>(null, [Validators.required, Validators.min(1)]),
         yeast: new FormControl<string>(``, []),
         yeastTolerance: new FormControl<number>(16, [Validators.required]),
         power: new FormControl<number>(16, [Validators.required]),

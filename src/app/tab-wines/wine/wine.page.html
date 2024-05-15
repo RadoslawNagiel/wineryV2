@@ -62,14 +62,13 @@
                 </div>
             </ion-item>
 
-            @for (parameter of parameters; track $index) {
+            @for (parameter of parameters; track $index) { @if (parameter.format ? parameter.format($any(wine)[parameter.key]) :
+            $any(wine)[parameter.key]; as value) {
             <ion-item>
                 <ion-label> {{parameter.label}} </ion-label>
-                <ion-text slot="end" class="truncate"
-                    >{{parameter.format ? parameter.format($any(wine)[parameter.key]) : $any(wine)[parameter.key]}}</ion-text
-                >
+                <ion-text slot="end" class="truncate">{{value}}</ion-text>
             </ion-item>
-            }
+            } }
             <ion-item>
                 <ion-textarea
                     label="Opis"

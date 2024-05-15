@@ -43,6 +43,10 @@ export default class WineInProgressPage extends ComponentBase {
             format: (value: string) => `${value}%`,
         },
         {
+            label: `Litraż`,
+            key: `capacity`,
+        },
+        {
             label: `Drożdże`,
             key: `yeast`,
         },
