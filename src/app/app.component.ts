@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
-import { ThemeService } from '../utils/services/theme.service';
+import { ThemeService } from '../services/theme.service';
 import { ComponentBase } from '../utils/classes/component.base';
 import { SetStore } from '../utils/store/app.actions';
 import { addPolishWords } from '../utils/add-polish-words';

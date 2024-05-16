@@ -56,6 +56,15 @@
             </ion-item>
 
             <ion-item>
+                <ion-select label="Słodkość" okText="Potwierdź" cancelText="Anuluj" formControlName="sweetness">
+                    <ion-select-option [value]="Sweetness.dry">Wytrawne</ion-select-option>
+                    <ion-select-option [value]="Sweetness.semiDry">Półwytrawne</ion-select-option>
+                    <ion-select-option [value]="Sweetness.semiSweet">Półsłodkie</ion-select-option>
+                    <ion-select-option [value]="Sweetness.sweet">Słodkie</ion-select-option>
+                </ion-select>
+            </ion-item>
+
+            <ion-item>
                 <ion-textarea label="Opis" labelPlacement="floating" formControlName="description" [autoGrow]="true" [rows]="5"> </ion-textarea>
             </ion-item>
         </ion-list>

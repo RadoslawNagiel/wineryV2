@@ -2,11 +2,12 @@ export interface Wine {
     id: string;
     name: string;
     description: string;
-    createDate: Date;
+    createDate: string;
     capacity: number;
     power: number;
     yeast?: string;
     yeastTolerance?: number;
+    sweetness: Sweetness;
     startSugar?: number;
     recipe?: Recipe;
     done?: boolean;
@@ -62,6 +63,13 @@ export enum ProductionStage {
     Drainage = `Zlewanie znad osadu`,
     StopFermentation = `Przerwanie fermentacji`,
     Bottling = `Butelkowanie`,
+}
+
+export enum Sweetness {
+    dry = `Wytrawne`,
+    semiDry = `Półwytrawne`,
+    semiSweet = `Półsłodkie`,
+    sweet = `Słodkie`,
 }
 
 export enum Units {

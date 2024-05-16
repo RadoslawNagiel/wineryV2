@@ -1,4 +1,4 @@
-import { Wine } from '../interfaces';
+import { Sweetness, Wine } from '../interfaces';
 import { RECIPES } from './recipes';
 
 export const WINES_EXAMPLE: Wine[] = [
@@ -13,6 +13,7 @@ export const WINES_EXAMPLE: Wine[] = [
         yeast: `Drożdże 18% amprio`,
         imageBase64: `/assets/example-wine.jpg`,
         numberOfBottles: 20,
+        sweetness: Sweetness.semiSweet,
     },
     {
         id: Math.random().toString(),
@@ -24,6 +25,7 @@ export const WINES_EXAMPLE: Wine[] = [
         recipe: RECIPES[1],
         yeast: `Drożdże 18% amprio`,
         numberOfBottles: 10,
+        sweetness: Sweetness.semiSweet,
     },
     {
         id: Math.random().toString(),
@@ -34,6 +36,7 @@ export const WINES_EXAMPLE: Wine[] = [
         power: 12,
         recipe: RECIPES[0],
         yeast: `Drożdże 18% amprio`,
+        sweetness: Sweetness.semiSweet,
     },
     {
         id: Math.random().toString(),
@@ -44,6 +47,7 @@ export const WINES_EXAMPLE: Wine[] = [
         power: 12,
         recipe: RECIPES[0],
         yeast: `Drożdże 18% amprio`,
+        sweetness: Sweetness.semiSweet,
     },
     {
         id: Math.random().toString(),
@@ -54,5 +58,6 @@ export const WINES_EXAMPLE: Wine[] = [
         power: 12,
         recipe: RECIPES[0],
         yeast: `Drożdże 18% amprio`,
+        sweetness: Sweetness.semiSweet,
     },
 ];

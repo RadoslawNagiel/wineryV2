@@ -1,11 +1,11 @@
 import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { v4 } from 'uuid';
 import { ComponentBase } from '../../../../utils/classes/component.base';
-import { Recipe } from '../../../../utils/interfaces';
+import { Recipe, Sweetness } from '../../../../utils/interfaces';
 import { AddWine } from '../../../../utils/store/app.actions';
 
 @Component({
@@ -13,10 +13,11 @@ import { AddWine } from '../../../../utils/store/app.actions';
     standalone: true,
     selector: `detail`,
     templateUrl: `detail.page.html`,
-    imports: [IonicModule, ReactiveFormsModule],
+    imports: [IonicModule, ReactiveFormsModule, FormsModule],
     providers: [DatePipe],
 })
 export default class DetailPage extends ComponentBase {
+    readonly Sweetness = Sweetness;
     readonly activatedRoute = inject(ActivatedRoute);
     readonly router = inject(Router);
     readonly datePipe = inject(DatePipe);
@@ -28,6 +29,7 @@ export default class DetailPage extends ComponentBase {
         yeast: new FormControl<string>(``, []),
         yeastTolerance: new FormControl<number>(16, [Validators.required]),
         power: new FormControl<number>(16, [Validators.required]),
+        sweetness: new FormControl<Sweetness>(Sweetness.dry, [Validators.required]),
         description: new FormControl<string>(``, []),
     });
 
@@ -50,7 +52,7 @@ export default class DetailPage extends ComponentBase {
                 id,
                 name: this.form.value.name ?? ``,
                 description: this.form.value.description ?? ``,
-                createDate: new Date(this.form.value.date ?? new Date()),
+                createDate: new Date(this.form.value.date ?? new Date()).toISOString(),
                 capacity: this.form.value.capacity ?? 1,
                 power: this.form.value.power ?? 1,
                 yeast: this.form.value.yeast ?? ``,
@@ -60,6 +62,7 @@ export default class DetailPage extends ComponentBase {
                 done: false,
                 numberOfBottles: 0,
                 stagesDone: [],
+                sweetness: this.form.value.sweetness ?? Sweetness.dry,
             }),
         );
         this.router.navigate([`/tabs/tab-production/${id}`]);

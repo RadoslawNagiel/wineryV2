@@ -1,52 +1,9 @@
-<ion-header collapse="fade">
-    <ion-toolbar>
-        <ion-buttons slot="start">
-            <ion-back-button text="" defaultHref="/tabs/tab-production" />
-        </ion-buttons>
-        @if(wine(); as wine){
-        <ion-title>{{wine.name}}</ion-title>
-        <div
-            slot="end"
-            [id]="'present-alert'"
-            class="flex justify-center items-center size-12 mr-1"
-            (click)="$event.preventDefault(); $event.stopPropagation()"
-        >
-            <ion-icon name="trash-outline"></ion-icon>
-        </div>
-        <ion-alert
-            [trigger]="'present-alert'"
-            [header]="'Czy na pewno chcesz usunąć ' + wine.name + '?'"
-            [buttons]="alertButtons"
-            (didDismiss)="setResult($event, wine.id)"
-        ></ion-alert>
-        }
-    </ion-toolbar>
-</ion-header>
+<app-wine-header [wine]="wine()"></app-wine-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
     @if(wine(); as wine){
     <div class="flex flex-col gap-4">
-        <div
-            class="relative border-dashed rounded-lg overflow-hidden"
-            [ngClass]="{'border-4 border-neutral-300 bg-neutral-500': !wine.imageBase64}"
-            (click)="imageHolderClicked()"
-        >
-            <image-holder
-                [url]="wine.imageBase64 ?? 'assets/example-wine.jpg'"
-                [ratio]="wine.imageBase64 ? 3/4 : 2/1"
-                [ngClass]="{'grayscale opacity-60': !wine.imageBase64}"
-            />
-            @if (!wine.imageBase64) {
-            <ion-icon class="absolute inset-0 m-auto text-neutral-300 shadow-2xl size-20" name="camera-outline" />
-            } @if (wine.imageBase64) {
-            <div
-                class="bg-neutral-800 absolute bottom-4 right-4 rounded-full size-12 flex justify-center items-center opacity-70"
-                (click)="takePhoto()"
-            >
-                <ion-icon class="text-white shadow-2xl size-8" name="camera-outline"></ion-icon>
-            </div>
-            }
-        </div>
+        <app-wine-image-holder [wine]="wine"></app-wine-image-holder>
 
         <ion-list class="py-0 my-2">
             @for (parameter of parameters; track $index) { @if (parameter.format ? parameter.format($any(wine)[parameter.key]) :
@@ -59,7 +16,7 @@
             <ion-item>
                 <ion-textarea
                     label="Opis"
-                    (ionChange)="editDescription($event.detail.value ?? '')"
+                    (ionChange)="wineService.editDescription(wine, $event.detail.value ?? '')"
                     [rows]="1"
                     [autoGrow]="true"
                     [value]="wine.description"
@@ -73,6 +30,102 @@
                 @if (wine.recipe?.ingredients?.length; as ingredientsLength) { @for (ingredient of wine.recipe?.ingredients ?? []; track $index) {
                 <ion-item [lines]="$index === ingredientsLength -1 ? 'none' : ''">
                     {{ingredient.name}} - {{ingredient.value}} {{ingredient.unit}}
+                </ion-item>
+                } }
+            </ion-list>
+        </div>
+
+        <div>
+            <ion-card-title>Następny etap</ion-card-title>
+
+            <ion-card class="mx-0">
+                <ion-card-header>
+                    <div class="flex gap-2 items-center">
+                        <ion-card-title> {{nearestStage?.name}} </ion-card-title>
+
+                        <ion-datetime-button datetime="datetime"></ion-datetime-button>
+                        <ion-modal [keepContentsMounted]="true">
+                            <ng-template>
+                                <ion-datetime
+                                    id="datetime"
+                                    presentation="date"
+                                    [value]="nearestDateInput"
+                                    (ionChange)="changeDate($event)"
+                                ></ion-datetime>
+                            </ng-template>
+                        </ion-modal>
+                    </div>
+                </ion-card-header>
+
+                <ion-card-content>
+                    <ng-container
+                        *ngIf="(nearestStage?.name === ProductionStage.Preparation && !mustCreated) || (nearestStage?.name === ProductionStage.StopFermentation &&!endFermentation) ||(nearestStage?.name === ProductionStage.Bottling && !clearWine); else normalStage"
+                    >
+                        <div *ngIf="nearestStage?.name === ProductionStage.Preparation">
+                            {{ wine.recipe?.productStages?.[0]?.description }}<br />
+                            Nastepnie dokonaj pomiaru zawartości cukru w roztworze. Proces pomiaru został opisany w poradniku
+                            <span class="items-center reference whitespace-nowrap" (click)="openGuides('moc-wina')">
+                                <ion-icon name="book-outline"></ion-icon>&nbsp;Moc wina
+                            </span>
+                            <app-calc-blg [onlyBlg]="true" [power]="wine.power" (onsugarChanged)="changeSugar($event)"></app-calc-blg>
+                            <div class="must-capacity-container">
+                                <ion-input class="text-center" min="0" type="number" [(ngModel)]="mustCapacity"></ion-input>
+                                <div>l - litraż moszczu</div>
+                            </div>
+                            <div class="font-semibold">Wpisz pomiar do kalkulatora a następnie zatwierdź poniższym przyciskiem</div>
+                            <ion-button (click)="changeSugarAccept()">Zatwierdź</ion-button>
+                        </div>
+                        <div *ngIf="nearestStage?.name === ProductionStage.StopFermentation">
+                            Sprawdź czy drożdże zakończyły swoją pracę. Oznacza to, że przez rurkę nie wydostaje się już dwutlenek węgla i poziom wody
+                            w niej jest stale równy. Cały cukier powinien być już strawiony przez drożdże, a wino powinno już posiadać oczekiwaną moc.
+                            <div class="font-semibold">Czy drożdże zakończyły już swoją pracę?</div>
+                            <div class="flex justify-start pt-1">
+                                <ion-button (click)="changeStageToDrainage()">Nie</ion-button>
+                                <ion-button (click)="endFermentation = true">Tak</ion-button>
+                            </div>
+                        </div>
+                        <div *ngIf="nearestStage?.name === ProductionStage.Bottling">
+                            <div class="font-semibold">Czy wino jest klarowne i na dnie gąsiora nie zbiera się już osad?</div>
+                            <div class="flex justify-start pt-1">
+                                <ion-button (click)="changeStageToDrainage()">Nie</ion-button>
+                                <ion-button (click)="clearWine = true">Tak</ion-button>
+                            </div>
+                        </div>
+                    </ng-container>
+
+                    <ng-template #normalStage>
+                        <div class="pl-1">{{ getStageDescription(nearestStage?.name) }}</div>
+                        @if (nearestStage?.name === ProductionStage.Preparation || nearestStage?.name === ProductionStage.Straining) {
+                        <app-calc-glucose-syrup
+                            [disableSugarEdit]="true"
+                            [glucoseSyrup]="getHalfSugar()"
+                            [capacity]="getHalfSugar()"
+                        ></app-calc-glucose-syrup>
+                        }
+
+                        <div class="flex flex-wrap">
+                            @for(guide of nearestStage?.guides; track $index){
+                            <ion-chip [routerLink]="'/tabs/tab-guides/' + guide.slug">{{guide.name}}</ion-chip>
+                            }
+                        </div>
+
+                        <div class="flex justify-between flex-row-reverse">
+                            <ion-button (click)="doStage()">Etap wykonany!</ion-button>
+                            <ion-button *ngIf="nearestStageIndex" (click)="undoStage()">Cofnij etap</ion-button>
+                        </div>
+                    </ng-template>
+                </ion-card-content>
+            </ion-card>
+        </div>
+
+        <div>
+            <ion-card-title>Etapy produkcjiniki</ion-card-title>
+            <ion-list class="py-0 my-2">
+                @if (wine.recipe?.productStages?.length; as stagesLength) { @for (stage of wine.recipe?.productStages ?? []; track $index) {
+
+                <ion-item [lines]="$index === stagesLength -1 ? 'none' : ''">
+                    <ion-checkbox disabled [checked]="wine.stagesDone?.[$index]"></ion-checkbox>
+                    {{stage.name}}
                 </ion-item>
                 } }
             </ion-list>

@@ -1,0 +1,24 @@
+<ion-header collapse="fade">
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button text="" defaultHref="/tabs/tab-production" />
+        </ion-buttons>
+        @if (wine(); as wine) {
+            <ion-title>{{ wine.name }}</ion-title>
+            <div
+                slot="end"
+                [id]="'present-alert'"
+                class="flex justify-center items-center size-12 mr-1"
+                (click)="$event.preventDefault(); $event.stopPropagation()"
+            >
+                <ion-icon name="trash-outline"></ion-icon>
+            </div>
+            <ion-alert
+                [trigger]="'present-alert'"
+                [header]="'Czy na pewno chcesz usunąć ' + wine.name + '?'"
+                [buttons]="alertButtons"
+                (didDismiss)="wineService.setResult($event, wine.id)"
+            ></ion-alert>
+        }
+    </ion-toolbar>
+</ion-header>

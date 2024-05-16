@@ -3,7 +3,7 @@ import { Component, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
-import { ToastService } from 'src/utils/services/toast-service.service';
+import { ToastService } from 'src/services/toast-service.service';
 
 @Component({
     standalone: true,
