@@ -14,6 +14,7 @@ import { ImageHolderComponent } from '../image-holder/image-holder.component';
 })
 export class WineImageHolderComponent {
     wine = input.required<Wine>();
+    collapsed = input(false);
 
     readonly wineService = inject(WineService);
     readonly alertButtons = structuredClone(ALERT_REMOVE_BUTTONS);

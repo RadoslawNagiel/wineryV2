@@ -30,7 +30,7 @@ export class WineService {
     // PHOTO
 
     imageHolderClicked(wine: Wine) {
-        if (wine.imageBase64) {
+        if (!wine.imageBase64) {
             this.takePhoto(wine);
         }
     }
@@ -50,10 +50,17 @@ export class WineService {
 
     // REMOVE
 
-    setResult(ev: any, id: string) {
+    setResult(ev: any, id: string, url: string) {
         if (ev.detail.role === `confirm`) {
             this.store.dispatch(new RemoveWine(id));
-            this.router.navigate([`/tabs/tab-wines`]);
+            this.router.navigate([url]);
+        }
+    }
+
+    setPhotoResult(ev: any, wine: Wine) {
+        if (ev.detail.role === `confirm`) {
+            wine.imageBase64 = undefined;
+            this.store.dispatch(new UpdateWine(wine, wine.id));
         }
     }
 }

@@ -1,7 +1,7 @@
 <ion-header collapse="fade">
     <ion-toolbar>
         <ion-buttons slot="start">
-            <ion-back-button text="" defaultHref="/tabs/tab-production" />
+            <ion-back-button text="" [defaultHref]="backUrl()" />
         </ion-buttons>
         @if (wine(); as wine) {
             <ion-title>{{ wine.name }}</ion-title>
@@ -17,7 +17,7 @@
                 [trigger]="'present-alert'"
                 [header]="'Czy na pewno chcesz usunąć ' + wine.name + '?'"
                 [buttons]="alertButtons"
-                (didDismiss)="wineService.setResult($event, wine.id)"
+                (didDismiss)="wineService.setResult($event, wine.id, backUrl())"
             ></ion-alert>
         }
     </ion-toolbar>

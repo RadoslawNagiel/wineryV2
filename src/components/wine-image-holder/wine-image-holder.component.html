@@ -5,7 +5,7 @@
 >
     <image-holder
         [url]="wine().imageBase64 ?? 'assets/example-wine.jpg'"
-        [ratio]="wine().imageBase64 ? 3 / 4 : 2 / 1"
+        [ratio]="wine().imageBase64 && !collapsed() ? 3 / 4 : 2 / 1"
         [ngClass]="{ 'grayscale opacity-60': !wine().imageBase64 }"
     />
     @if (!wine().imageBase64) {
@@ -18,5 +18,23 @@
         >
             <ion-icon class="text-white shadow-2xl size-8" name="camera-outline"></ion-icon>
         </div>
+        <div
+            class="bg-neutral-800 absolute bottom-4 left-4 rounded-full size-12 flex justify-center items-center opacity-70"
+            (click)="wineService.takePhoto(wine())"
+        ></div>
+
+        <div
+            id="photo-trigger"
+            class="bg-neutral-800 absolute bottom-4 left-4 rounded-full size-12 flex justify-center items-center opacity-70"
+            (click)="$event.preventDefault(); $event.stopPropagation()"
+        >
+            <ion-icon class="text-white shadow-2xl size-8" name="trash-outline"></ion-icon>
+        </div>
+        <ion-alert
+            trigger="photo-trigger"
+            [header]="'Czy na pewno chcesz usunąć to zdjęcie?'"
+            [buttons]="alertButtons"
+            (didDismiss)="wineService.setPhotoResult($event, wine())"
+        ></ion-alert>
     }
 </div>

@@ -17,10 +17,11 @@ export class AppComponent extends ComponentBase {
 
     ngOnInit() {
         this.themeService.initTheme();
+        addPolishWords();
+
         const state = localStorage.getItem(`state`);
         if (state) {
             this.store.dispatch(new SetStore(JSON.parse(state)));
         }
-        addPolishWords();
     }
 }

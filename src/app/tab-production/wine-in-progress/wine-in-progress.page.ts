@@ -1,4 +1,4 @@
-import { DatePipe, NgClass, NgFor, NgIf } from '@angular/common';
+import { DatePipe, NgClass } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -6,15 +6,19 @@ import { IonicModule } from '@ionic/angular';
 import { CalcBlgComponent } from '../../../components/calc-blg/calc-blg.component';
 import { CalcGlucoseSyrupComponent } from '../../../components/calc-glucose-syrup/calc-glucose-syrup.component';
 import { HeaderComponent } from '../../../components/wine-header/wine-header.component';
+import { WineImageHolderComponent } from '../../../components/wine-image-holder/wine-image-holder.component';
 import { ToastService } from '../../../services/toast-service.service';
 import { WineService } from '../../../services/wine.service';
 import { ComponentBase } from '../../../utils/classes/component.base';
 import { getSlug } from '../../../utils/get-slug';
 import { ProductStage, ProductStageDescription, ProductionStage, Sweetness, Units, Wine } from '../../../utils/interfaces';
 import { UpdateWine } from '../../../utils/store/app.actions';
-import { PRODUC_STAGES_DESCRIPTIONS } from '../../../utils/variables/product-stages copy';
+import { PRODUCT_STAGES_DESCRIPTIONS } from '../../../utils/variables/product-stages copy';
 import { WINE_IN_PROGRESS_DETAILS } from '../../../utils/variables/wine-details';
-import { WineImageHolderComponent } from '../../../components/wine-image-holder/wine-image-holder.component';
+import { roundDecimal } from '../../../utils/get-recipes-detail copy';
+import { DAY_TIMESTAMP } from '../../../utils/variables/day-timestamp';
+import { IngredientsComponent } from '../../../components/ingredients/ingredients.component';
+import { StagesComponent } from '../../../components/stages/stages.component';
 
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -24,26 +28,51 @@ import { WineImageHolderComponent } from '../../../components/wine-image-holder/
     imports: [
         IonicModule,
         NgClass,
-        NgIf,
         CalcBlgComponent,
         CalcGlucoseSyrupComponent,
         FormsModule,
-        NgFor,
         DatePipe,
         HeaderComponent,
         WineImageHolderComponent,
         RouterLink,
+        IngredientsComponent,
+        StagesComponent,
     ],
 })
 export default class WineInProgressPage extends ComponentBase {
     readonly parameters = WINE_IN_PROGRESS_DETAILS;
+    readonly roundDecimal = roundDecimal;
+    readonly ProductionStage = ProductionStage;
+
+    readonly DESCRIPTIONS = {
+        Preparation: `Nastepnie dokonaj pomiaru zawartości cukru w roztworze. Proces pomiaru został opisany w poradniku`,
+        StopFermentation: `Sprawdź czy drożdże zakończyły swoją pracę. Oznacza to, że przez rurkę nie wydostaje się już dwutlenek węgla i poziom wody w niej jest stale równy. Cały cukier powinien być już strawiony przez drożdże, a wino powinno już posiadać oczekiwaną moc.`,
+    };
+
+    readonly router = inject(Router);
+    readonly toastService = inject(ToastService);
+    readonly wineService = inject(WineService);
 
     wines = signal<Wine[]>([]);
     wine = signal<Wine | undefined>(undefined);
 
-    router = inject(Router);
-    toastService = inject(ToastService);
-    wineService = inject(WineService);
+    collapsed = signal(false);
+
+    mustAddSugar = signal(false);
+    isFermentationFinished = signal(false);
+    isWineClear = signal(false);
+
+    blg: number | undefined;
+    literWeight = 1000;
+    mustCapacity: number | undefined;
+
+    nearestStage: {
+        index: number;
+        info?: ProductStageDescription;
+        date?: string;
+    } = {
+        index: 0,
+    };
 
     ngOnInit() {
         this.subs.sink = this.store
@@ -54,132 +83,48 @@ export default class WineInProgressPage extends ComponentBase {
                 const wine = structuredClone(this.wines()).find((g: any) => g.id === id);
                 this.wine.set(wine);
 
-                //! OLD
                 this.getNearestStage();
                 if (wine?.recipe) {
-                    this.mustCreated = wine.recipe.ingredients.find((ingredient) => ingredient.name === `cukier`) !== undefined;
+                    this.mustAddSugar.set(!wine.recipe.ingredients.find((ingredient) => ingredient.name === `cukier`));
                 }
             });
     }
 
-    // ! OLD
+    // STAGE ACTION
+    undoStage(wine: Wine) {
+        this.clearData();
 
-    mustCreated = false;
-    endFermentation = false;
-    clearWine = false;
-
-    dayTimestamp = 86400000;
-
-    nearestStageIndex = 0;
-    nearestStage?: ProductStageDescription;
-    nearestDateInput = ``;
-
-    ProductionStage = ProductionStage;
-
-    mustCapacity = 0;
-
-    undoStage() {
-        this.endFermentation = false;
-        this.clearWine = false;
-
-        const wine = this.wine();
-        if (!wine?.stagesDone) {
-            return;
-        }
-        wine.stagesDone[this.nearestStageIndex - 1] = false;
+        wine.stagesDone[this.nearestStage.index - 1] = false;
         this.getNearestStage();
         this.updateWine(wine);
     }
 
-    async doStage() {
-        this.endFermentation = false;
-        this.clearWine = false;
+    async doStage(wine: Wine) {
+        this.clearData();
 
-        const wine = this.wine();
-        if (!wine?.stagesDone) {
-            return;
-        }
-
-        wine.stagesDone[this.nearestStageIndex] = true;
-        this.getNearestStage();
+        wine.stagesDone[this.nearestStage.index] = true;
         this.updateWine(wine);
-        if (this.nearestStageIndex === wine.stagesDone.length) {
+
+        this.getNearestStage();
+
+        if (this.nearestStage.index === wine.stagesDone.length) {
+            // finish wine
             wine.done = true;
             this.updateWine(wine);
 
-            await this.router.navigate([`/tabs/tab1`], {
+            await this.router.navigate([`/tabs/tab-production`], {
                 skipLocationChange: true,
             });
-
-            await this.router.navigate([`/tabs/tab2/show-wine`], {
-                queryParams: {
-                    index: this.wine()?.id,
-                },
-            });
+            await this.router.navigate([`/tabs/tab-wines/${wine.id}`]);
         }
     }
 
-    getHalfSugar() {
-        return Math.round(this.getSugarValue() / 2) / 1000;
+    clearData() {
+        this.isFermentationFinished.set(false);
+        this.isWineClear.set(false);
     }
 
-    getSugarValue() {
-        const wine = this.wine();
-        if (!wine?.recipe) {
-            return 0;
-        }
-        return Math.round(wine.recipe.ingredients.find((ing) => ing.name === `cukier`)?.value ?? 0);
-    }
-
-    changeStageToDrainage() {
-        const wine = this.wine();
-        if (!wine?.recipe || !wine?.stagesDone) {
-            return;
-        }
-        const date = wine.recipe.productStages[this.nearestStageIndex].date;
-        const stage: ProductStage = {
-            name: ProductionStage.Drainage,
-            date: date,
-        };
-        wine.recipe.productStages.splice(this.nearestStageIndex, 0, stage);
-        wine.stagesDone.splice(this.nearestStageIndex, 0, false);
-
-        const dateDifference = 28 * this.dayTimestamp;
-        const length = wine.recipe.productStages.length;
-        for (let i = this.nearestStageIndex + 1; i < length; ++i) {
-            wine.recipe.productStages[i].date += dateDifference;
-        }
-
-        this.updateWine(wine);
-        this.getNearestStage();
-        this.toastService.presentToastSuccess(`Dodano nowy etap`);
-    }
-
-    changeDate(event: any) {
-        const wine = this.wine();
-        if (!wine?.recipe) {
-            return;
-        }
-        const value = event.detail.value;
-        if (value !== `` && value != this.nearestDateInput) {
-            const selectDate = new Date(value).getTime();
-            const lastDate = wine.recipe.productStages[this.nearestStageIndex].date + new Date(wine.createDate).getTime();
-            if (this.nearestStageIndex) {
-                const earielStageDate = wine.recipe.productStages[this.nearestStageIndex - 1].date + new Date(wine.createDate).getTime();
-                if (earielStageDate > selectDate) {
-                    this.toastService.presentToastError(`Data nie może być wcześniejsza niż poprzedni etap`);
-                    event.target.value = this.getNearestDate();
-                    return;
-                }
-            }
-            const dateDifference = selectDate - lastDate;
-            for (let i = this.nearestStageIndex; i < wine.recipe.productStages.length; ++i) {
-                wine.recipe.productStages[i].date += dateDifference;
-            }
-            this.toastService.presentToastSuccess(`Zmieniono datę`);
-            this.updateWine(wine);
-        }
-    }
+    // GET INFO
 
     getNearestStage() {
         const wine = this.wine();
@@ -193,12 +138,12 @@ export default class WineInProgressPage extends ComponentBase {
             }
             index++;
         }
-        this.nearestStageIndex = index;
+        this.nearestStage.index = index;
         if (index === wine.stagesDone.length) {
             return;
         }
-        this.nearestStage = PRODUC_STAGES_DESCRIPTIONS.find((stage) => stage.name === wine.recipe?.productStages[index].name);
-        this.nearestDateInput = this.getNearestDate();
+        this.nearestStage.info = PRODUCT_STAGES_DESCRIPTIONS.find((stage) => stage.name === wine.recipe?.productStages[index].name);
+        this.nearestStage.date = this.getNearestDate();
     }
 
     getNearestDate() {
@@ -207,50 +152,84 @@ export default class WineInProgressPage extends ComponentBase {
             return ``;
         }
 
-        const date = new Date(wine.recipe.productStages[this.nearestStageIndex].date + new Date(wine.createDate).getTime());
+        const date = new Date(wine.recipe.productStages[this.nearestStage.index].date + wine.createDate);
         const day = `0${date.getDate()}`.slice(-2);
         const month = `0${date.getMonth() + 1}`.slice(-2);
         return `${date.getFullYear()}-${month}-${day}`;
     }
 
-    getStopFermentationDescription() {
-        const wine = this.wine();
-        if (!wine?.recipe) {
-            return ``;
-        }
-
-        if (wine.sweetness === Sweetness.dry) {
-            return this.nearestStage?.descriptions?.[0];
-        }
-        if (wine.yeastTolerance === wine.power) {
-            return this.nearestStage?.descriptions?.[1];
-        }
-        return this.nearestStage?.descriptions?.[2];
+    getHalfSugar(wine: Wine) {
+        return Math.round((wine.recipe.ingredients.find((ing) => ing.name === `cukier`)?.value ?? 0) / 2) / 1000;
     }
 
-    getStageDescription(stageName?: ProductionStage) {
-        let description = PRODUC_STAGES_DESCRIPTIONS.find((description) => description.name === stageName)?.description ?? ``;
+    getStopFermentationDescription(wine: Wine) {
+        if (wine.sweetness === Sweetness.dry) {
+            return this.nearestStage.info?.descriptions?.[0];
+        }
+        if (wine.yeastTolerance === wine.power) {
+            return this.nearestStage.info?.descriptions?.[1];
+        }
+        return this.nearestStage.info?.descriptions?.[2];
+    }
+
+    getStageDescription(wine: Wine) {
+        const stageName = this.nearestStage.info?.name;
+        let description = PRODUCT_STAGES_DESCRIPTIONS.find((description) => description.name === stageName)?.description ?? ``;
         if (stageName === ProductionStage.StopFermentation) {
-            return this.getStopFermentationDescription();
+            return this.getStopFermentationDescription(wine);
         }
         return description;
     }
 
-    changeSugar(sugar: number) {
+    // UPDATE
+
+    changeDate(event: any) {
         const wine = this.wine();
-        if (!wine) {
+        const date = event.detail.value;
+        if (!wine?.recipe || date === ``) {
             return;
         }
-        wine.startSugar = sugar;
-        this.updateWine(wine);
+        if (date !== this.nearestStage.date) {
+            const selectDate = new Date(date).getTime();
+            const lastDate = wine.recipe.productStages[this.nearestStage.index].date + wine.createDate;
+            if (this.nearestStage.index) {
+                const earlierStageDate = wine.recipe.productStages[this.nearestStage.index - 1].date + wine.createDate;
+                if (earlierStageDate > selectDate) {
+                    this.toastService.presentToastError(`Data nie może być wcześniejsza niż poprzedni etap`);
+                    event.target.value = this.getNearestDate();
+                    return;
+                }
+            }
+            const dateDifference = selectDate - lastDate;
+            for (let i = this.nearestStage.index; i < wine.recipe.productStages.length; ++i) {
+                wine.recipe.productStages[i].date += dateDifference;
+            }
+            this.updateWine(wine);
+        }
     }
 
-    changeSugarAccept() {
-        const wine = this.wine();
-        if (!wine?.startSugar || !wine?.recipe) {
-            return;
+    changeStageToDrainage(wine: Wine) {
+        const date = wine.recipe.productStages[this.nearestStage.index].date;
+        const stage: ProductStage = {
+            name: ProductionStage.Drainage,
+            date: date,
+        };
+        wine.recipe.productStages.splice(this.nearestStage.index, 0, stage);
+        wine.stagesDone.splice(this.nearestStage.index, 0, false);
+
+        const dateDifference = 28 * DAY_TIMESTAMP;
+        const length = wine.recipe.productStages.length;
+        for (let i = this.nearestStage.index + 1; i < length; ++i) {
+            wine.recipe.productStages[i].date += dateDifference;
         }
-        wine.startSugar *= this.mustCapacity;
+
+        this.updateWine(wine);
+        this.getNearestStage();
+        this.toastService.presentToastSuccess(`Dodano nowy etap`);
+    }
+
+    changeSugarAccept(wine: Wine) {
+        wine.startSugar = roundDecimal((((this.blg ?? 0) * (this.mustCapacity ?? 0)) / 100) * this.literWeight);
         const fullSugar = wine.capacity * wine.power * 17 - wine.startSugar;
         if (fullSugar < 0 || this.mustCapacity === 0) {
             this.toastService.presentToastError(`Wprowadzono niepoprawne dane`);
@@ -262,19 +241,16 @@ export default class WineInProgressPage extends ComponentBase {
             unit: Units.gramy,
         });
         this.updateWine(wine);
-        this.mustCreated = true;
-    }
-
-    async openGuides(slug: string) {
-        await this.router.navigate([`/tabs/tab3/${slug}`]);
-        // await this.router.navigate([`/tabs/tab3/${slug}`], {
-        //   queryParams: {
-        //     backWine: this.wine()?.id,
-        //   },
-        // });
+        this.mustAddSugar.set(false);
     }
 
     updateWine(wine: Wine) {
         this.store.dispatch(new UpdateWine(wine, wine.id));
+    }
+
+    // NAVIGATE
+
+    async openGuides(slug: string) {
+        await this.router.navigate([`/tabs/tab3/${slug}`]);
     }
 }

@@ -1,0 +1,18 @@
+<div>
+    <ion-card-title>Etapy produkcjiniki</ion-card-title>
+    <ion-list class="py-0 my-2 pointer-events-none">
+        @if (productStages().length; as stagesLength) {
+            @for (stage of productStages(); track $index) {
+                <ion-item [lines]="$index === stagesLength - 1 ? 'none' : ''">
+                    <div class="flex gap-2 items-center">
+                        @if (showCheckbox()) {
+                            <ion-checkbox disabled [checked]="wine().stagesDone[$index]"></ion-checkbox>
+                        }
+                        {{ wine().createDate + stage.date | date: 'dd.MM.YYYY' }}
+                    </div>
+                    <div class="w-full text-right">{{ stage.name }}</div>
+                </ion-item>
+            }
+        }
+    </ion-list>
+</div>

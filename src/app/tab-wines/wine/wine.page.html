@@ -1,4 +1,4 @@
-<app-wine-header [wine]="wine()"></app-wine-header>
+<app-wine-header [wine]="wine()" backUrl="/tabs/tab-wines"></app-wine-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
     @if(wine(); as wine){
@@ -37,24 +37,9 @@
                 </ion-textarea>
             </ion-item>
         </ion-list>
-        <div>
-            <ion-card-title>Składniki</ion-card-title>
-            <ion-list class="py-0 my-2">
-                @if (wine.recipe?.ingredients?.length; as ingredientsLength) { @for (ingredient of wine.recipe?.ingredients ?? []; track $index) {
-                <ion-item [lines]="$index === ingredientsLength -1 ? 'none' : ''">
-                    {{ingredient.name}} - {{ingredient.value}} {{ingredient.unit}}
-                </ion-item>
-                } }
-            </ion-list>
-        </div>
-        <div>
-            <ion-card-title>Etapy produkcjiniki</ion-card-title>
-            <ion-list class="py-0 my-2">
-                @if (wine.recipe?.productStages?.length; as stagesLength) { @for (stage of wine.recipe?.productStages ?? []; track $index) {
-                <ion-item [lines]="$index === stagesLength -1 ? 'none' : ''"> {{stage.name}} </ion-item>
-                } }
-            </ion-list>
-        </div>
+
+        <app-ingredients [ingredients]="wine.recipe.ingredients"></app-ingredients>
+        <app-stages [productStages]="wine.recipe.productStages" [wine]="wine"></app-stages>
     </div>
     }
 </ion-content>

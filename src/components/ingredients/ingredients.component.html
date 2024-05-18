@@ -1,0 +1,12 @@
+<div>
+    <ion-card-title>Składniki</ion-card-title>
+    <ion-list class="py-0 my-2">
+        @if (ingredients().length; as ingredientsLength) {
+            @for (ingredient of ingredients(); track $index) {
+                <ion-item [lines]="$index === ingredientsLength - 1 ? 'none' : ''">
+                    {{ ingredient.name }} - {{ ingredient.value }} {{ ingredient.unit }}
+                </ion-item>
+            }
+        }
+    </ion-list>
+</div>

@@ -12,6 +12,7 @@ import { ALERT_REMOVE_BUTTONS } from '../../utils/variables/alert-remove-buttons
 })
 export class HeaderComponent {
     wine = input.required<Wine | undefined>();
+    backUrl = input.required<string>();
 
     readonly wineService = inject(WineService);
     readonly alertButtons = structuredClone(ALERT_REMOVE_BUTTONS);

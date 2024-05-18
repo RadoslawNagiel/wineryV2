@@ -46,22 +46,29 @@ export default class DetailPage extends ComponentBase {
     }
 
     addVineClick() {
+        const recipe = this.recipe();
+        if (!recipe) {
+            return;
+        }
+        const capacity = this.form.value.capacity ?? 1;
         const id = v4();
+
+        recipe.ingredients.forEach((ingredient) => (ingredient.value = Math.round(ingredient.value * capacity * 100) / 1000));
         this.store.dispatch(
             new AddWine({
                 id,
                 name: this.form.value.name ?? ``,
                 description: this.form.value.description ?? ``,
-                createDate: new Date(this.form.value.date ?? new Date()).toISOString(),
-                capacity: this.form.value.capacity ?? 1,
+                createDate: new Date(this.form.value.date ?? new Date()).getTime(),
+                capacity,
                 power: this.form.value.power ?? 1,
                 yeast: this.form.value.yeast ?? ``,
                 yeastTolerance: this.form.value.yeastTolerance ?? 1,
                 startSugar: 0,
-                recipe: this.recipe(),
+                recipe,
                 done: false,
                 numberOfBottles: 0,
-                stagesDone: [],
+                stagesDone: new Array(recipe.productStages.length).fill(false),
                 sweetness: this.form.value.sweetness ?? Sweetness.dry,
             }),
         );

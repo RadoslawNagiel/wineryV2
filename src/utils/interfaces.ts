@@ -2,17 +2,17 @@ export interface Wine {
     id: string;
     name: string;
     description: string;
-    createDate: string;
+    createDate: number;
     capacity: number;
     power: number;
-    yeast?: string;
-    yeastTolerance?: number;
+    recipe: Recipe;
+    stagesDone: boolean[];
+    yeastTolerance: number;
     sweetness: Sweetness;
+    done: boolean;
+    yeast?: string;
     startSugar?: number;
-    recipe?: Recipe;
-    done?: boolean;
     numberOfBottles?: number;
-    stagesDone?: boolean[];
     imageBase64?: string;
 }
 

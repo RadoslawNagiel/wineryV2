@@ -150,6 +150,21 @@ export const GUIDES: Guide[] = [
         ],
     },
     {
+        slug: `pomiar-cukromierzem-blg`,
+        name: `Pomiar cukromierzem BLG`,
+        description: `Aby dokonać pomiaru cukromierzem, przelewamy roztwór przez sitko do próbówki. Następnie umieszczamy w niej cukromierz i zakręcamy nim, aby pozbyć się pęcherzyków powietrza, które mogły na nim osiąść. Aby pomiar był jak najbardziej dokładny, płyn powinien mieć temperaturę 20°C. Następnie odczytujemy z cukromierza liczbę w skali Ballinga. 1 stopień BLG to 10 g cukru na 1 kg roztworu.`,
+        guides: [
+            {
+                name: `Moc wina`,
+                slug: `moc-wina`,
+            },
+            {
+                name: `Kalkulator BLG`,
+                slug: `kalkulator-BLG`,
+            },
+        ],
+    },
+    {
         slug: `slodkosc-wina`,
         name: `Słodkość wina`,
         description: `Wino na podstawie zawartości cukru, możemy przydzielić do poniższych kategorii.<br>

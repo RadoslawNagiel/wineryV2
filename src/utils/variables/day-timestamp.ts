@@ -1,0 +1,1 @@
+export const DAY_TIMESTAMP = 86400000;

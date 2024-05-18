@@ -28,7 +28,7 @@ export const PRODUC_STAGES: ProductStage[] = [
     },
 ];
 
-export const PRODUC_STAGES_DESCRIPTIONS: ProductStageDescription[] = [
+export const PRODUCT_STAGES_DESCRIPTIONS: ProductStageDescription[] = [
     {
         name: ProductionStage.Preparation,
         description: `Połowę zalecanego cukru rozpuszczamy w wodzie (lub w moszczu, jeśli brak miejsca na dodatkową wodę) według poniższego kalkulatora, w taki sposób, aby wypełnić pojemnik do oczekiwanej objętości. Otrzymany syrop cukrowy przelewamy do wiadra. Przygotowujemy zaczyn drożdżowy według zaleceń producenta i dodajemy go do wiadra jeśli temperatura moszczu jest mniejszej niż 30°C. Wiadro zamykamy pokrywką z zamontowaną rurką fermentacyjną, którą wypełniamy do połowy wodą. Moszcz należy mieszać przynajmniej raz dziennie. Temperatura moszczu powinna wynosić około 21°C.`,

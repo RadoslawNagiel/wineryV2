@@ -1,4 +1,4 @@
-import { NgClass } from '@angular/common';
+import { DatePipe, NgClass } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
@@ -9,13 +9,15 @@ import { ComponentBase } from '../../../utils/classes/component.base';
 import { getSlug } from '../../../utils/get-slug';
 import { Wine } from '../../../utils/interfaces';
 import { WINE_DETAILS } from '../../../utils/variables/wine-details';
+import { IngredientsComponent } from '../../../components/ingredients/ingredients.component';
+import { StagesComponent } from '../../../components/stages/stages.component';
 
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: true,
     selector: `wine`,
     templateUrl: `wine.page.html`,
-    imports: [IonicModule, NgClass, HeaderComponent, WineImageHolderComponent],
+    imports: [IonicModule, NgClass, HeaderComponent, WineImageHolderComponent, DatePipe, IngredientsComponent, StagesComponent],
 })
 export default class WinePage extends ComponentBase {
     readonly parameters = WINE_DETAILS;

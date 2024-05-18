@@ -39,8 +39,9 @@ export const WINE_IN_PROGRESS_DETAILS: {
         format: (value: string) => `${value}%`,
     },
     {
-        label: `Litraż`,
+        label: `Pojemność`,
         key: `capacity`,
+        format: (value: string) => `${value} l`,
     },
     {
         label: `Drożdże`,

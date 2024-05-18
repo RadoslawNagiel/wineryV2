@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { State, Action, StateContext } from '@ngxs/store';
+
 import { Recipe, Wine } from '../interfaces';
+
 import { AddRecipe, AddWine, RemoveRecipe, RemoveWine, SetRecipes, SetStore, SetWines, UpdateWine } from './app.actions';
 
 export interface AppStateModel {
@@ -9,7 +11,7 @@ export interface AppStateModel {
 }
 
 @State<AppStateModel>({
-    name: 'app',
+    name: `app`,
     defaults: {
         wines: [],
         recipes: [],
@@ -31,7 +33,7 @@ export class AppState {
             ...state,
             wines: action.wines,
         });
-        localStorage.setItem(`state`, JSON.stringify(ctx.getState()));
+        this.savePreferences(ctx.getState());
     }
 
     @Action(AddWine)
@@ -41,7 +43,7 @@ export class AppState {
             ...state,
             wines: [...state.wines, action.wine],
         });
-        localStorage.setItem(`state`, JSON.stringify(ctx.getState()));
+        this.savePreferences(ctx.getState());
     }
 
     @Action(RemoveWine)
@@ -52,7 +54,7 @@ export class AppState {
             state.wines.splice(index, 1);
             ctx.setState(structuredClone(state));
         }
-        localStorage.setItem(`state`, JSON.stringify(ctx.getState()));
+        this.savePreferences(ctx.getState());
     }
 
     @Action(UpdateWine)
@@ -63,7 +65,7 @@ export class AppState {
             state.wines[index] = action.wine;
             ctx.setState(structuredClone(state));
         }
-        localStorage.setItem(`state`, JSON.stringify(ctx.getState()));
+        this.savePreferences(ctx.getState());
     }
 
     // RECIPE
@@ -75,7 +77,7 @@ export class AppState {
             ...state,
             recipes: action.recipe,
         });
-        localStorage.setItem(`state`, JSON.stringify(ctx.getState()));
+        this.savePreferences(ctx.getState());
     }
 
     @Action(AddRecipe)
@@ -85,7 +87,7 @@ export class AppState {
             ...state,
             recipes: [action.recipe, ...state.recipes],
         });
-        localStorage.setItem(`state`, JSON.stringify(ctx.getState()));
+        this.savePreferences(ctx.getState());
     }
 
     @Action(RemoveRecipe)
@@ -96,6 +98,10 @@ export class AppState {
             state.recipes.splice(index, 1);
             ctx.setState(structuredClone(state));
         }
-        localStorage.setItem(`state`, JSON.stringify(ctx.getState()));
+        this.savePreferences(ctx.getState());
+    }
+
+    savePreferences(state: AppStateModel) {
+        localStorage.setItem(`state`, JSON.stringify(state));
     }
 }

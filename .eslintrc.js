@@ -1,7 +1,6 @@
-
 module.exports = {
     rules: {
-		  "linebreak-style": [`error`, `unix`],
+        'linebreak-style': [`error`, `window`],
     },
     extends: [`./node_modules/eslint-config-anp`],
 };
