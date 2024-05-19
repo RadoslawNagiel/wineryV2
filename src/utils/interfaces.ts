@@ -1,3 +1,5 @@
+import { GUIDE_NAME } from './variables/guides';
+
 export interface Wine {
     id: string;
     name: string;
@@ -40,20 +42,12 @@ export interface ProductStageDescription {
     name: ProductionStage;
     description: string;
     descriptions?: string[];
-    guides: {
-        name: string;
-        slug: string;
-    }[];
+    guides: GUIDE_NAME[];
 }
 
 export interface Guide {
-    slug: string;
-    name: string;
+    name: GUIDE_NAME;
     description: string;
-    guides: {
-        name: string;
-        slug: string;
-    }[];
     calculator?: Calculators;
 }
 

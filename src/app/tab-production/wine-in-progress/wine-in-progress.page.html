@@ -1,4 +1,4 @@
-<app-wine-header [wine]="wine()" backUrl="/tabs/tab-production"></app-wine-header>
+<app-wine-header [wine]="wine()" [backUrl]="['/tabs','tab-production']"></app-wine-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
     @if(wine(); as wine){
@@ -49,9 +49,10 @@
                                     presentation="date"
                                     [value]="nearestStage.date"
                                     [showDefaultButtons]="true"
+                                    [min]="getEarlierStageDate(wine) | date: 'YYYY-MM-dd'"
                                     doneText="Potwierdź"
                                     cancelText="Anuluj"
-                                    (ionChange)="changeDate($event)"
+                                    (ionChange)="changeDate(wine, $event)"
                                 ></ion-datetime>
                             </ng-template>
                         </ion-modal>
@@ -64,7 +65,7 @@
                     <!--=============================== PREPARATION =============================-->
                     <div>{{ wine.recipe.productStages[0].description }}</div>
                     <div>{{DESCRIPTIONS.Preparation}}</div>
-                    <ion-chip [routerLink]="'/tabs/tab-guides/pomiar-cukromierzem-blg'">Pomiar cukromierzem BLG</ion-chip>
+                    <ion-chip [routerLink]="['/tabs','tab-guides','pomiar-cukromierzem-blg']">Pomiar cukromierzem BLG</ion-chip>
 
                     <div>
                         <ion-input
@@ -95,7 +96,7 @@
                             [ngModelOptions]="{ standalone: true }"
                         ></ion-input>
                         <ion-input
-                            label="Pocztkowy cukier (gramy)"
+                            label="Początkowy cukier (gramy)"
                             type="number"
                             min="0"
                             [required]="true"
@@ -131,14 +132,14 @@
                     @if (nearestStage.info?.name === ProductionStage.Preparation || nearestStage.info?.name === ProductionStage.Straining) {
                     <app-calc-glucose-syrup
                         [disableSugarEdit]="true"
-                        [glucoseSyrup]="getHalfSugar(wine)"
+                        [sugar]="getHalfSugar(wine)"
                         [capacity]="getHalfSugar(wine)"
                     ></app-calc-glucose-syrup>
                     }
 
                     <div class="flex flex-wrap">
                         @for(guide of nearestStage.info?.guides; track $index){
-                        <ion-chip [routerLink]="'/tabs/tab-guides/' + guide.slug">{{guide.name}}</ion-chip>
+                        <ion-chip [routerLink]="['/tabs','tab-guides',slugify(guide)]">{{guide}}</ion-chip>
                         }
                     </div>
 

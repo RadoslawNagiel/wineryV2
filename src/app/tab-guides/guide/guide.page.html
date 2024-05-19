@@ -21,10 +21,10 @@
         <ion-card>
             <ion-card-content> <app-calc-glucose-syrup></app-calc-glucose-syrup> </ion-card-content>
         </ion-card>
-        } @if(guide.guides.length){
+        } @if(getSimilarGuides(); as guides){
         <div class="flex flex-wrap">
-            @for(guideLink of guide.guides; track $index){
-            <ion-chip [routerLink]="'/tabs/tab-guides/' + guideLink.slug" (click)="loadSlug(guideLink.slug)">{{guideLink.name}}</ion-chip>
+            @for(guide of guides; track $index){
+            <ion-chip [routerLink]="['/tabs', 'tab-guides', slugify(guide)]" (click)="loadSlug(slugify(guide))">{{guide}}</ion-chip>
             }
         </div>
         } }

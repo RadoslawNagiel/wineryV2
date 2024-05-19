@@ -6,6 +6,7 @@ import { GUIDES } from '../../utils/variables/guides';
 import { Guide } from '../../utils/interfaces';
 import { SearchPipe } from '../../utils/pipes/search.pipe';
 import { NoDataComponent } from '../../components/no-data/no-data.component';
+import { slugify } from '../../utils/slugify';
 
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -15,6 +16,8 @@ import { NoDataComponent } from '../../components/no-data/no-data.component';
     imports: [IonicModule, HeaderComponent, SearchPipe, RouterLink, NoDataComponent],
 })
 export default class TabGuidesPage {
+    readonly slugify = slugify;
+
     searchValue = signal(``);
 
     guides = signal<Guide[]>(structuredClone(GUIDES));

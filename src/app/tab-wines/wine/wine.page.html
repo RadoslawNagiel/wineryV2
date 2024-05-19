@@ -1,4 +1,4 @@
-<app-wine-header [wine]="wine()" backUrl="/tabs/tab-wines"></app-wine-header>
+<app-wine-header [wine]="wine()" [backUrl]="['/tabs', 'tab-wines']"></app-wine-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
     @if(wine(); as wine){

@@ -13,12 +13,13 @@ import { ComponentBase } from '../../../utils/classes/component.base';
 import { getSlug } from '../../../utils/get-slug';
 import { ProductStage, ProductStageDescription, ProductionStage, Sweetness, Units, Wine } from '../../../utils/interfaces';
 import { UpdateWine } from '../../../utils/store/app.actions';
-import { PRODUCT_STAGES_DESCRIPTIONS } from '../../../utils/variables/product-stages copy';
 import { WINE_IN_PROGRESS_DETAILS } from '../../../utils/variables/wine-details';
 import { roundDecimal } from '../../../utils/get-recipes-detail copy';
 import { DAY_TIMESTAMP } from '../../../utils/variables/day-timestamp';
 import { IngredientsComponent } from '../../../components/ingredients/ingredients.component';
 import { StagesComponent } from '../../../components/stages/stages.component';
+import { slugify } from '../../../utils/slugify';
+import { PRODUCT_STAGES_DESCRIPTIONS } from '../../../utils/variables/product-stages';
 
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -38,11 +39,13 @@ import { StagesComponent } from '../../../components/stages/stages.component';
         IngredientsComponent,
         StagesComponent,
     ],
+    providers: [DatePipe],
 })
 export default class WineInProgressPage extends ComponentBase {
     readonly parameters = WINE_IN_PROGRESS_DETAILS;
     readonly roundDecimal = roundDecimal;
     readonly ProductionStage = ProductionStage;
+    readonly slugify = slugify;
 
     readonly DESCRIPTIONS = {
         Preparation: `Nastepnie dokonaj pomiaru zawartości cukru w roztworze. Proces pomiaru został opisany w poradniku`,
@@ -52,6 +55,7 @@ export default class WineInProgressPage extends ComponentBase {
     readonly router = inject(Router);
     readonly toastService = inject(ToastService);
     readonly wineService = inject(WineService);
+    readonly datePipe = inject(DatePipe);
 
     wines = signal<Wine[]>([]);
     wine = signal<Wine | undefined>(undefined);
@@ -83,8 +87,8 @@ export default class WineInProgressPage extends ComponentBase {
                 const wine = structuredClone(this.wines()).find((g: any) => g.id === id);
                 this.wine.set(wine);
 
-                this.getNearestStage();
-                if (wine?.recipe) {
+                if (wine) {
+                    this.getNearestStage(wine);
                     this.mustAddSugar.set(!wine.recipe.ingredients.find((ingredient) => ingredient.name === `cukier`));
                 }
             });
@@ -95,7 +99,7 @@ export default class WineInProgressPage extends ComponentBase {
         this.clearData();
 
         wine.stagesDone[this.nearestStage.index - 1] = false;
-        this.getNearestStage();
+        this.getNearestStage(wine);
         this.updateWine(wine);
     }
 
@@ -105,17 +109,18 @@ export default class WineInProgressPage extends ComponentBase {
         wine.stagesDone[this.nearestStage.index] = true;
         this.updateWine(wine);
 
-        this.getNearestStage();
+        this.getNearestStage(wine);
 
         if (this.nearestStage.index === wine.stagesDone.length) {
             // finish wine
             wine.done = true;
+            wine.numberOfBottles = Math.floor(wine.capacity / 0.75);
             this.updateWine(wine);
 
-            await this.router.navigate([`/tabs/tab-production`], {
+            await this.router.navigate([`/tabs`, `tab-production`], {
                 skipLocationChange: true,
             });
-            await this.router.navigate([`/tabs/tab-wines/${wine.id}`]);
+            await this.router.navigate([`/tabs`, `tab-wines`, `${wine.id}`]);
         }
     }
 
@@ -126,11 +131,7 @@ export default class WineInProgressPage extends ComponentBase {
 
     // GET INFO
 
-    getNearestStage() {
-        const wine = this.wine();
-        if (!wine?.stagesDone) {
-            return;
-        }
+    getNearestStage(wine: Wine) {
         let index = 0;
         for (let stage of wine.stagesDone) {
             if (!stage) {
@@ -143,19 +144,12 @@ export default class WineInProgressPage extends ComponentBase {
             return;
         }
         this.nearestStage.info = PRODUCT_STAGES_DESCRIPTIONS.find((stage) => stage.name === wine.recipe?.productStages[index].name);
-        this.nearestStage.date = this.getNearestDate();
+        this.nearestStage.date = this.getNearestDate(wine);
     }
 
-    getNearestDate() {
-        const wine = this.wine();
-        if (!wine?.recipe) {
-            return ``;
-        }
-
+    getNearestDate(wine: Wine) {
         const date = new Date(wine.recipe.productStages[this.nearestStage.index].date + wine.createDate);
-        const day = `0${date.getDate()}`.slice(-2);
-        const month = `0${date.getMonth() + 1}`.slice(-2);
-        return `${date.getFullYear()}-${month}-${day}`;
+        return this.datePipe.transform(date, `YYYY-MM-dd`) ?? ``;
     }
 
     getHalfSugar(wine: Wine) {
@@ -183,22 +177,19 @@ export default class WineInProgressPage extends ComponentBase {
 
     // UPDATE
 
-    changeDate(event: any) {
-        const wine = this.wine();
+    changeDate(wine: Wine, event: any) {
         const date = event.detail.value;
-        if (!wine?.recipe || date === ``) {
+        if (date === ``) {
             return;
         }
         if (date !== this.nearestStage.date) {
             const selectDate = new Date(date).getTime();
             const lastDate = wine.recipe.productStages[this.nearestStage.index].date + wine.createDate;
-            if (this.nearestStage.index) {
-                const earlierStageDate = wine.recipe.productStages[this.nearestStage.index - 1].date + wine.createDate;
-                if (earlierStageDate > selectDate) {
-                    this.toastService.presentToastError(`Data nie może być wcześniejsza niż poprzedni etap`);
-                    event.target.value = this.getNearestDate();
-                    return;
-                }
+            const earlierStageDate = this.getEarlierStageDate(wine);
+            if (earlierStageDate && earlierStageDate > selectDate) {
+                this.toastService.presentToastError(`Data nie może być wcześniejsza niż poprzedni etap`);
+                event.target.value = this.getNearestDate(wine);
+                return;
             }
             const dateDifference = selectDate - lastDate;
             for (let i = this.nearestStage.index; i < wine.recipe.productStages.length; ++i) {
@@ -206,6 +197,13 @@ export default class WineInProgressPage extends ComponentBase {
             }
             this.updateWine(wine);
         }
+    }
+
+    getEarlierStageDate(wine: Wine) {
+        if (this.nearestStage.index) {
+            return wine.recipe.productStages[this.nearestStage.index - 1].date + wine.createDate;
+        }
+        return null;
     }
 
     changeStageToDrainage(wine: Wine) {
@@ -224,7 +222,7 @@ export default class WineInProgressPage extends ComponentBase {
         }
 
         this.updateWine(wine);
-        this.getNearestStage();
+        this.getNearestStage(wine);
         this.toastService.presentToastSuccess(`Dodano nowy etap`);
     }
 
@@ -251,6 +249,6 @@ export default class WineInProgressPage extends ComponentBase {
     // NAVIGATE
 
     async openGuides(slug: string) {
-        await this.router.navigate([`/tabs/tab3/${slug}`]);
+        await this.router.navigate([`/tabs`, `tab3`, `${slug}`]);
     }
 }

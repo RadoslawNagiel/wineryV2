@@ -15,7 +15,7 @@ import { ToastService } from 'src/services/toast-service.service';
 export class CalcGlucoseSyrupComponent {
     @Input() disableSugarEdit = false;
 
-    @Input() sugarAmount = 1;
+    @Input() sugar = 1;
     @Input() capacity = 1;
     @Input() glucoseSyrup = 1.6;
 
@@ -33,14 +33,14 @@ export class CalcGlucoseSyrupComponent {
     }
 
     changedSugarOrCapacity() {
-        if (this.sugarAmount < 0) {
-            this.sugarAmount = 0;
+        if (this.sugar < 0) {
+            this.sugar = 0;
         }
         if (this.capacity < 0) {
             this.capacity = 0;
         }
 
-        const newGlucoseSyrup = this.capacity + this.sugarAmount * 0.6;
+        const newGlucoseSyrup = this.capacity + this.sugar * 0.6;
         this.glucoseSyrup = Math.round(newGlucoseSyrup * 100) / 100;
 
         this.checkValid();
@@ -51,12 +51,12 @@ export class CalcGlucoseSyrupComponent {
             this.glucoseSyrup = 0;
         }
 
-        const newCapacity = this.glucoseSyrup - this.sugarAmount * 0.6;
+        const newCapacity = this.glucoseSyrup - this.sugar * 0.6;
         this.capacity = Math.round(newCapacity * 100) / 100;
 
         if (this.capacity < 0) {
             this.capacity = 0;
-            const newGlucoseSyrup = this.capacity + this.sugarAmount * 0.6;
+            const newGlucoseSyrup = this.capacity + this.sugar * 0.6;
             this.glucoseSyrup = Math.round(newGlucoseSyrup * 100) / 100;
         }
 
@@ -64,7 +64,7 @@ export class CalcGlucoseSyrupComponent {
     }
 
     checkValid() {
-        if (this.capacity * 2 < this.sugarAmount) {
+        if (this.capacity * 2 < this.sugar) {
             this.valueValid = false;
             this.toastService.presentToastError(`stosunek cukru do płynu powinien wynosić przynajmniej 2:1`);
             return;

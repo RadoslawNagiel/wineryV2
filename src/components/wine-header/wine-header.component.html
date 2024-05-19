@@ -5,12 +5,7 @@
         </ion-buttons>
         @if (wine(); as wine) {
             <ion-title>{{ wine.name }}</ion-title>
-            <div
-                slot="end"
-                [id]="'present-alert'"
-                class="flex justify-center items-center size-12 mr-1"
-                (click)="$event.preventDefault(); $event.stopPropagation()"
-            >
+            <div slot="end" [id]="'present-alert'" class="flex justify-center items-center size-12 mr-1">
                 <ion-icon name="trash-outline"></ion-icon>
             </div>
             <ion-alert

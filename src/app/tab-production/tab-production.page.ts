@@ -23,7 +23,31 @@ export default class TabProductionPage extends ComponentBase {
         this.subs.sink = this.store
             .select((state) => state.app.wines)
             .subscribe((wines) => {
-                this.wines.set(structuredClone(wines)?.filter((el: Wine) => !el.done) ?? []);
+                let wineList = structuredClone(wines)?.filter((el: Wine) => !el.done) ?? [];
+                wineList = wineList.sort((a: Wine, b: Wine) => (this.getNearestStageDate(a) > this.getNearestStageDate(b) ? 1 : -1));
+                this.wines.set(wineList);
             });
+    }
+
+    getNearestStageDate(wine: Wine) {
+        let index = wine.stagesDone.filter((stage) => stage).length;
+        if (index === wine.stagesDone.length) {
+            return Date.now();
+        }
+        return wine.recipe.productStages[index].date + wine.createDate;
+    }
+
+    getNearestStage(wine: Wine) {
+        let index = wine.stagesDone.filter((stage) => stage).length;
+        if (index === wine.stagesDone.length) {
+            return {
+                name: `Wino gotowe`,
+                date: new Date().getTime(),
+            };
+        }
+        return {
+            name: wine.recipe.productStages[index].name,
+            date: wine.recipe.productStages[index].date + wine.createDate,
+        };
     }
 }

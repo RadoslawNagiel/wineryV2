@@ -26,7 +26,18 @@ export default class TabWinesPage extends ComponentBase {
         this.subs.sink = this.store
             .select((state) => state.app.wines)
             .subscribe((wines) => {
-                this.wines.set(structuredClone(wines).filter((el: Wine) => el.done));
+                let wineList = structuredClone(wines ?? []).filter((el: Wine) => el.done);
+                wineList = wineList.sort((a: Wine, b: Wine) => b.createDate - a.createDate);
+                wineList = wineList.sort((a: Wine, b: Wine) => {
+                    if (!b.numberOfBottles && a.numberOfBottles) {
+                        return -1;
+                    }
+                    if (b.numberOfBottles && !a.numberOfBottles) {
+                        return 1;
+                    }
+                    return 0;
+                });
+                this.wines.set(wineList);
             });
     }
 }

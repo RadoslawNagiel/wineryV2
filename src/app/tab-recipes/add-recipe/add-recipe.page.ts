@@ -38,6 +38,6 @@ export default class AddRecipePage extends ComponentBase {
             ],
         };
         this.store.dispatch(new AddRecipe(recipe));
-        this.router.navigate([`/tabs/tab-recipes`]);
+        this.router.navigate([`/tabs`, `tab-recipes`]);
     }
 }

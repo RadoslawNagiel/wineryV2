@@ -22,6 +22,7 @@ export class AppState {
     @Action(SetStore)
     setStore(ctx: StateContext<AppStateModel>, action: SetStore) {
         ctx.setState(action.store);
+        this.savePreferences(ctx.getState());
     }
 
     // WINE

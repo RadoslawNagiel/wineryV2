@@ -50,7 +50,7 @@ export class WineService {
 
     // REMOVE
 
-    setResult(ev: any, id: string, url: string) {
+    setResult(ev: any, id: string, url: string[]) {
         if (ev.detail.role === `confirm`) {
             this.store.dispatch(new RemoveWine(id));
             this.router.navigate([url]);

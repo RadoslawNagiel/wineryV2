@@ -27,7 +27,7 @@ export default class TabRecipesPage extends ComponentBase {
         this.subs.sink = this.store
             .select((state) => state.app.recipes)
             .subscribe((recipes) => {
-                this.recipes.set(getRecipesDetail(structuredClone(recipes)));
+                this.recipes.set(getRecipesDetail(structuredClone(recipes ?? [])));
             });
     }
 

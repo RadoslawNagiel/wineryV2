@@ -61,7 +61,7 @@ export default class AddWinePage extends ComponentBase {
                     text: `Przejdź`,
                     role: `Continue`,
                     handler: () => {
-                        this.router.navigate([`/tabs/tab-recipes`]);
+                        this.router.navigate([`/tabs`, `tab-recipes`]);
                     },
                 },
             ],
@@ -94,7 +94,7 @@ export default class AddWinePage extends ComponentBase {
                 },
             ],
         };
-        this.router.navigate([`/tabs/tab-production/add-wine/detail`], {
+        this.router.navigate([`/tabs`, `tab-production`, `add-wine`, `detail`], {
             queryParams: {
                 recipe: JSON.stringify(recipe),
             },

@@ -72,6 +72,9 @@ export default class DetailPage extends ComponentBase {
                 sweetness: this.form.value.sweetness ?? Sweetness.dry,
             }),
         );
-        this.router.navigate([`/tabs/tab-production/${id}`]);
+        this.router.navigate([`/tabs`, `tab-production`, `${id}`], {
+            skipLocationChange: true,
+            replaceUrl: true,
+        });
     }
 }

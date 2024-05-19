@@ -3,7 +3,7 @@
 <ion-content [fullscreen]="true">
     @if ((wines() | search: {param: ['name', 'description'], search: searchValue()}); as wines) { @if (wines.length) { @for (wine of wines; track
     $index) {
-    <ion-card [routerLink]="'/tabs/tab-production/' + wine.id">
+    <ion-card [routerLink]="['/tabs','tab-production', wine.id]">
         <image-holder
             [url]="wine.imageBase64 ?? 'assets/example-wine.jpg'"
             [ratio]="2/1"
@@ -11,7 +11,9 @@
         ></image-holder>
         <ion-card-header>
             <ion-card-title>{{wine.name}} {{wine.capacity}} l</ion-card-title>
-            <ion-card-subtitle>{{wine.createDate | date: 'dd-MM-YYYY'}} </ion-card-subtitle>
+            @if (getNearestStage(wine); as nearestStage) {
+            <ion-card-subtitle>{{nearestStage.date | date: 'dd.MM.YYYY'}} - {{nearestStage.name}}</ion-card-subtitle>
+            }
         </ion-card-header>
         <ion-card-content>
             <div class="line-clamp-3 whitespace-pre-line" [innerHTML]="wine.description"></div>
@@ -23,7 +25,7 @@
     <div class="h-16"></div>
 
     <ion-fab horizontal="end" vertical="bottom" slot="fixed">
-        <ion-fab-button routerLink="/tabs/tab-production/add-wine">
+        <ion-fab-button [routerLink]="['/tabs','tab-production','add-wine']">
             <ion-icon name="add"></ion-icon>
         </ion-fab-button>
     </ion-fab>

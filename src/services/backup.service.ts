@@ -33,7 +33,6 @@ export class BackupService {
             if (data.app !== `winery`) {
                 throw new Error(`unknown file`);
             }
-            localStorage.setItem(`state`, data);
             this.store.dispatch(new SetStore(data));
             void this.toastService.presentToastSuccess(`Zaimportowano dane`);
         } catch {
