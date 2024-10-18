@@ -11,7 +11,14 @@
     <form [formGroup]="form" class="flex flex-col gap-4">
         <ion-list>
             <ion-item>
-                <ion-input label="Nazwa" labelPlacement="floating" maxlength="52" formControlName="name"></ion-input>
+                <ion-input
+                    autocapitalize="sentences"
+                    autocorrect="on"
+                    label="Nazwa"
+                    labelPlacement="floating"
+                    maxlength="52"
+                    formControlName="name"
+                ></ion-input>
             </ion-item>
 
             <ion-item>
@@ -23,7 +30,7 @@
             </ion-item>
 
             <ion-item>
-                <ion-input label="Drożdże" labelPlacement="floating" maxlength="52" formControlName="yeast"></ion-input>
+                <ion-input autocapitalize="sentences" label="Drożdże" labelPlacement="floating" maxlength="52" formControlName="yeast"></ion-input>
             </ion-item>
 
             <ion-item>
@@ -64,8 +71,25 @@
                 </ion-select>
             </ion-item>
 
+            @if(form.value.sweetness !== Sweetness.dry && (form.value.power ?? 0) < (form.value.yeastTolerance ?? 0)){
             <ion-item>
-                <ion-textarea label="Opis" labelPlacement="floating" formControlName="description" [autoGrow]="true" [rows]="5"> </ion-textarea>
+                <div class="my-2 text-xs text-neutral-400">
+                    Jeżeli wino ma nie być wytrawne, najprościej będzie, jeśli jego moc będzie równa tolerancji drożdży.
+                </div>
+            </ion-item>
+            }
+
+            <ion-item>
+                <ion-textarea
+                    autocapitalize="sentences"
+                    autocorrect="on"
+                    label="Opis"
+                    labelPlacement="floating"
+                    formControlName="description"
+                    [autoGrow]="true"
+                    [rows]="5"
+                >
+                </ion-textarea>
             </ion-item>
         </ion-list>
     </form>

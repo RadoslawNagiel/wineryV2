@@ -8,14 +8,14 @@
         @if(recipe.manualAdded){
         <div
             slot="end"
-            [id]="'present-alert'"
+            [id]="'present-alert-recipe'"
             class="flex justify-center items-center size-12 mr-1"
             (click)="$event.preventDefault(); $event.stopPropagation()"
         >
             <ion-icon name="trash-outline"></ion-icon>
         </div>
         <ion-alert
-            [trigger]="'present-alert'"
+            [trigger]="'present-alert-recipe'"
             [header]="'Czy na pewno chcesz usunąć ' + recipe.name + '?'"
             [buttons]="alertButtons"
             (didDismiss)="setResult($event, recipe.slug)"

@@ -5,11 +5,11 @@
         </ion-buttons>
         @if (wine(); as wine) {
             <ion-title>{{ wine.name }}</ion-title>
-            <div slot="end" [id]="'present-alert'" class="flex justify-center items-center size-12 mr-1">
+            <div slot="end" [id]="'present-alert-wine'" class="flex justify-center items-center size-12 mr-1">
                 <ion-icon name="trash-outline"></ion-icon>
             </div>
             <ion-alert
-                [trigger]="'present-alert'"
+                [trigger]="'present-alert-wine'"
                 [header]="'Czy na pewno chcesz usunąć ' + wine.name + '?'"
                 [buttons]="alertButtons"
                 (didDismiss)="wineService.setResult($event, wine.id, backUrl())"

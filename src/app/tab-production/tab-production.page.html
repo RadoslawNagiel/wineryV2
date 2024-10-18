@@ -25,8 +25,16 @@
     <div class="h-16"></div>
 
     <ion-fab horizontal="end" vertical="bottom" slot="fixed">
-        <ion-fab-button [routerLink]="['/tabs','tab-production','add-wine']">
+        <ion-fab-button>
             <ion-icon name="add"></ion-icon>
         </ion-fab-button>
+        <ion-fab-list side="top">
+            <ion-fab-button [routerLink]="['/tabs','tab-production','add-wine']">
+                <ion-icon class="text-gray-500" name="pencil-outline"></ion-icon>
+            </ion-fab-button>
+            <ion-fab-button [routerLink]="['/tabs','tab-recipes']">
+                <ion-icon class="text-gray-500" name="reader-outline"></ion-icon>
+            </ion-fab-button>
+        </ion-fab-list>
     </ion-fab>
 </ion-content>

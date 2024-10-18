@@ -28,6 +28,8 @@
             } }
             <ion-item>
                 <ion-textarea
+                    autocapitalize="sentences"
+                    autocorrect="on"
                     label="Opis"
                     (ionChange)="wineService.editDescription(wine, $event.detail.value ?? '')"
                     [rows]="1"

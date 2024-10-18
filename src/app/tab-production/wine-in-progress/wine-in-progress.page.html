@@ -1,4 +1,4 @@
-<app-wine-header [wine]="wine()" [backUrl]="['/tabs','tab-production']"></app-wine-header>
+<app-wine-header [wine]="wine()" [backUrl]="['/tabs', 'tab-production']"></app-wine-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
     @if(wine(); as wine){
@@ -16,6 +16,8 @@
             } }
             <ion-item>
                 <ion-textarea
+                    autocapitalize="sentences"
+                    autocorrect="on"
                     label="Opis"
                     (ionChange)="wineService.editDescription(wine, $event.detail.value ?? '')"
                     [rows]="1"
@@ -63,8 +65,8 @@
                     @if(nearestStage.info?.name === ProductionStage.Preparation && mustAddSugar()){
 
                     <!--=============================== PREPARATION =============================-->
-                    <div>{{ wine.recipe.productStages[0].description }}</div>
-                    <div>{{DESCRIPTIONS.Preparation}}</div>
+                    <div class="line-clamp-5 whitespace-pre-line" [innerHTML]="wine.recipe.productStages[0].description"></div>
+                    <div class="line-clamp-5 whitespace-pre-line" [innerHTML]="DESCRIPTIONS.Preparation"></div>
                     <ion-chip [routerLink]="['/tabs','tab-guides','pomiar-cukromierzem-blg']">Pomiar cukromierzem BLG</ion-chip>
 
                     <div>
@@ -111,7 +113,7 @@
                     } @else if (nearestStage.info?.name === ProductionStage.StopFermentation &&!isFermentationFinished()) {
 
                     <!--=============================== STOP FERMENTATION =============================-->
-                    <div>{{DESCRIPTIONS.StopFermentation}}</div>
+                    <div class="line-clamp-5 whitespace-pre-line" [innerHTML]="DESCRIPTIONS.StopFermentation"></div>
                     <div class="font-semibold">Czy drożdże zakończyły już swoją pracę?</div>
                     <div class="flex justify-between">
                         <ion-button (click)="changeStageToDrainage(wine)">Nie</ion-button>
@@ -128,7 +130,7 @@
                     } @else {
 
                     <!--=============================== NORMAL STAGE =============================-->
-                    <div>{{ getStageDescription(wine) }}</div>
+                    <div class="line-clamp-5 whitespace-pre-line" [innerHTML]="getStageDescription(wine)"></div>
                     @if (nearestStage.info?.name === ProductionStage.Preparation || nearestStage.info?.name === ProductionStage.Straining) {
                     <app-calc-glucose-syrup
                         [disableSugarEdit]="true"
