@@ -7,6 +7,8 @@ import { AddRecipe } from '../../../utils/store/app.actions';
 import { Router } from '@angular/router';
 import { slugify } from '../../../utils/slugify';
 import { CreateRecipeComponent } from '../../../components/create-recipe/create-recipe.component';
+import { KeyboardService } from '../../../services/keyboard.service';
+import { setControlAsInvalid } from '../../../utils/set-control-as-invalid';
 
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -22,9 +24,20 @@ export default class AddRecipePage extends ComponentBase {
         ingredients: new FormControl<Ingredient[]>([], [Validators.required]),
     });
 
+    keyboardService = inject(KeyboardService);
     router = inject(Router);
 
     addRecipe() {
+        if (!this.form.valid) {
+            Object.keys(this.form.controls).forEach((key) => {
+                const control = (this.form.controls as any)[key];
+                if (!control.valid) {
+                    setControlAsInvalid(control);
+                }
+            });
+            return;
+        }
+
         const recipe: Recipe = {
             slug: slugify(this.form.value.name ?? ``),
             name: this.form.value.name ?? ``,

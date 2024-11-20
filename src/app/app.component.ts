@@ -4,6 +4,7 @@ import { ThemeService } from '../services/theme.service';
 import { ComponentBase } from '../utils/classes/component.base';
 import { SetStore } from '../utils/store/app.actions';
 import { addPolishWords } from '../utils/add-polish-words';
+import { KeyboardService } from '../services/keyboard.service';
 
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -14,8 +15,10 @@ import { addPolishWords } from '../utils/add-polish-words';
 })
 export class AppComponent extends ComponentBase {
     themeService = inject(ThemeService);
+    keyboardService = inject(KeyboardService);
 
     ngOnInit() {
+        this.keyboardService.addListeners();
         this.themeService.initTheme();
         addPolishWords();
 

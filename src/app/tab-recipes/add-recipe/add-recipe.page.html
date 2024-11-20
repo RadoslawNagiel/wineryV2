@@ -8,11 +8,16 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
-    <create-recipe (formChanged)="form = $event"></create-recipe>
+    <create-recipe [form]="form" (formChanged)="form = $event"></create-recipe>
+    @if(keyboardService.isKeyboardOpen()){
+    <ion-button class="w-full mt-4" size="large" (click)="addRecipe()">Dodaj</ion-button>
+    }
 </ion-content>
 
+@if(!keyboardService.isKeyboardOpen()){
 <ion-footer>
     <ion-toolbar>
-        <ion-button class="w-full ion-padding-horizontal" size="large" [disabled]="!form.valid" (click)="addRecipe()">Dodaj</ion-button>
+        <ion-button class="w-full ion-padding-horizontal" size="large" (click)="addRecipe()">Dodaj</ion-button>
     </ion-toolbar>
 </ion-footer>
+}

@@ -18,7 +18,7 @@ export class BackupService {
             const data = JSON.parse(state);
             data.app = `winery`;
             await Filesystem.writeFile({
-                path: 'wine_backup.json',
+                path: `winery_backup_${new Date().toLocaleDateString()}_${new Date().toLocaleTimeString()}.json`,
                 data: JSON.stringify(data),
                 directory: Directory.Documents,
                 encoding: Encoding.UTF8,

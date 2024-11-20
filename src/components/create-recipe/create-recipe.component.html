@@ -1,10 +1,10 @@
-<form [formGroup]="form" class="flex flex-col gap-4">
+<form [formGroup]="form()" class="flex flex-col gap-4">
     <ion-list>
         <ion-item>
             <ion-input
                 autocapitalize="sentences"
                 autocorrect="on"
-                label="Nazwa"
+                label="Nazwa *"
                 labelPlacement="floating"
                 maxlength="52"
                 formControlName="name"
@@ -15,7 +15,7 @@
             <ion-textarea
                 autocapitalize="sentences"
                 autocorrect="on"
-                label="Przygotowanie moszczu"
+                label="Przygotowanie moszczu *"
                 labelPlacement="floating"
                 helperText="Opisz proces przygotowywania moszczu. Powinien on zawierać proces przygotowywania wymienionych przez Ciebie składników."
                 formControlName="description"
@@ -26,7 +26,7 @@
     </ion-list>
 
     <div>
-        Składniki na 10 litrów
+        <div [ngClass]="form().value.ingredients.length ? '' : 'ingredient-text'">Składniki na 10 litrów *</div>
         <ion-list class="py-0 my-2">
             <ion-item>
                 <div class="flex items-center gap-2">
@@ -64,7 +64,7 @@
                     </ion-fab-button>
                 </div>
             </ion-item>
-            @if (form.value.ingredients; as ingredients) {
+            @if (form().value.ingredients; as ingredients) {
                 @for (ingredient of ingredients; track $index) {
                     <ion-item>
                         <div class="w-full flex justify-between items-center">

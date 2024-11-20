@@ -57,7 +57,7 @@ export const GUIDES: Guide[] = [
     },
     {
         name: GUIDE_NAME.Flooding,
-        description: `Aby zlać wino znad osadu, należy koniec wężyka zanurzyć do połowy zawartości gąsiora. Drugi koniec wężyka mocno zasysamy i umieszczamy w drugim gąsiorze, umieszczonym poniżej pierwszego. W trakcie zlewania należy stale kontrolować zanurzenie wężyka w winie. Jego końcówka musi ciągle znajdować się poniżej płynu, ale powyżej osadu. W ten sposób zlewamy całe wino, pozostawiając osad na dnie pierwszego gąsiora.`,
+        description: `Aby zlać wino znad osadu, należy koniec wężyka zanurzyć do połowy zawartości gąsiora. Drugi koniec wężyka mocno zasysamy i umieszczamy w drugim gąsiorze, umieszczonym poniżej pierwszego. W trakcie zlewania należy stale kontrolować zanurzenie wężyka w winie. Jego końcówka musi ciągle znajdować się poniżej powierzchni płynu, ale powyżej osadu. W ten sposób zlewamy całe wino, pozostawiając osad na dnie pierwszego gąsiora.`,
     },
     {
         name: GUIDE_NAME.Bottling,
@@ -65,12 +65,12 @@ export const GUIDES: Guide[] = [
     },
     {
         name: GUIDE_NAME.StoppingFermentation,
-        description: `JJeżeli przez rurkę nie wydostaje się już dwutlenek węgla i poziom wody w niej jest stale równy, oznacza to że drożdże przestały pracować. Jeżeli nie planujemy już dosładzać wina (aby zmienić jego słodkość), nie musimy pozbywać się pozostałych drożdży. W przeciwnym wypadku musimy użyć jednej z poniższych metod.<br>
-    <b>1) Zabicie drożdży alkoholem</b><br>
+        description: `Jeżeli przez rurkę nie wydostaje się już dwutlenek węgla i poziom wody w niej jest stale równy, oznacza to że drożdże przestały pracować. Jeżeli nie planujemy już dosładzać wina (aby zmienić jego słodkość), nie musimy pozbywać się pozostałych drożdży. W przeciwnym wypadku musimy użyć jednej z poniższych metod.<br>
+    <b>1) Zabicie drożdży alkoholem</b>
     Zależnie od rodzaju drożdży, mają one różny poziom tolerancji na alkohol. Możemy pozbyć się drożdży, jeżeli moc wytworzonego alkoholu osiągnie ten poziom. Nie należy dolewać do wina wysokoprocentowego alkoholu w celu pozbycia się drożdży.<br>
-    <b>2) Zabicie drożdży pirosiarczynem potasu</b><br>
-    Pirosiarczynu potasu można używać nie tylko do dezynfekcji, ale również do pozbycia się drożdży. Dodatkowo stabilizuje on wino, konserwuje je i zabezpiecza. Pirosiarczyn może być jednak potem wyczuwalny w winie. Zależnie od rodzaju drożdży, zaleca się dodanie różnej ilości pirosiarczynu. Dla słabszych drożdży będzie to około 1 gram na 10 litrów wina. Dla mocniejszych, wartość ta wzrasta do około 2,5 grama na 10 litrów. Po dodaniu siarki należy sprawdzić czy fermentacja faktycznie ustała.
-    <b>3) Zabicie drożdży wysoką temperaturą</b><br>
+    <b>2) Zabicie drożdży pirosiarczynem potasu</b>
+    Pirosiarczynu potasu można używać nie tylko do dezynfekcji, ale również do pozbycia się drożdży. Dodatkowo stabilizuje on wino, konserwuje je i zabezpiecza. Pirosiarczyn może być jednak potem wyczuwalny w winie. Zależnie od rodzaju drożdży, zaleca się dodanie różnej ilości pirosiarczynu. Dla słabszych drożdży będzie to około 1 gram na 10 litrów wina. Dla mocniejszych, wartość ta wzrasta do około 2,5 grama na 10 litrów. Po dodaniu siarki należy sprawdzić czy fermentacja faktycznie ustała.<br>
+    <b>3) Zabicie drożdży wysoką temperaturą</b>
     Drożdże obumierają w wysokiej temperaturze. Przelewamy wino do garnka i podgrzewamy do ponad 50°C. Utrzymujemy tę temperaturę przez kilka minut a następnie pozostawiamy wino do ostudzenia. Po procesie tym należy sprawdzić czy fermentacja faktycznie ustała.
     `,
     },
@@ -86,7 +86,7 @@ export const GUIDES: Guide[] = [
     },
     {
         name: GUIDE_NAME.Sweetness,
-        description: `Wino na podstawie zawartości cukru, możemy przydzielić do poniższych kategorii.<br>
+        description: `Wino na podstawie zawartości cukru w litrze, możemy przydzielić do poniższych kategorii.<br>
     • wytrawne - do 4-9 gramów (zależnie od kwaskowatości)<br>
     • półwytrawne - do 12-18 gramów (zależnie od kwaskowatości)<br>
     • półsłodkie - do 45 gramów<br>

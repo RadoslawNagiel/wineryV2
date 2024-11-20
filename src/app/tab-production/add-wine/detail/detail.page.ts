@@ -7,6 +7,8 @@ import { v4 } from 'uuid';
 import { ComponentBase } from '../../../../utils/classes/component.base';
 import { Recipe, Sweetness } from '../../../../utils/interfaces';
 import { AddWine } from '../../../../utils/store/app.actions';
+import { KeyboardService } from '../../../../services/keyboard.service';
+import { setControlAsInvalid } from '../../../../utils/set-control-as-invalid';
 
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -21,6 +23,7 @@ export default class DetailPage extends ComponentBase {
     readonly activatedRoute = inject(ActivatedRoute);
     readonly router = inject(Router);
     readonly datePipe = inject(DatePipe);
+    readonly keyboardService = inject(KeyboardService);
 
     readonly form = new FormGroup({
         name: new FormControl<string>(``, [Validators.required, Validators.maxLength(40)]),
@@ -50,6 +53,17 @@ export default class DetailPage extends ComponentBase {
         if (!recipe) {
             return;
         }
+
+        if (!this.form.valid) {
+            Object.keys(this.form.controls).forEach((key) => {
+                const control = (this.form.controls as any)[key];
+                if (!control.valid) {
+                    setControlAsInvalid(control);
+                }
+            });
+            return;
+        }
+
         const capacity = this.form.value.capacity ?? 1;
         const id = v4();
 

@@ -6,7 +6,10 @@ import { ComponentBase } from '../../../utils/classes/component.base';
 import { Ingredient, ProductionStage, Recipe } from '../../../utils/interfaces';
 import { CreateRecipeComponent } from '../../../components/create-recipe/create-recipe.component';
 import { slugify } from '../../../utils/slugify';
-import { Keyboard } from '@capacitor/keyboard';
+import { KeyboardService } from '../../../services/keyboard.service';
+import { Subscription } from 'rxjs';
+import { setControlAsInvalid } from '../../../utils/set-control-as-invalid';
+import { getRecipeStages } from '../../../utils/get-recipes-detail';
 
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -22,21 +25,28 @@ export default class AddWinePage extends ComponentBase {
         ingredients: new FormControl<Ingredient[]>([], [Validators.required]),
     });
 
+    keyboardService = inject(KeyboardService);
     router = inject(Router);
     toastController = inject(ToastController);
 
     toastDisplayed = signal(false);
 
+    keyboardSubscription = new Subscription();
+
     ngOnInit() {
-        Keyboard.removeAllListeners();
-        Keyboard.addListener(`keyboardDidShow`, () => {
-            this.dismissHintToast();
-        });
+        this.keyboardSubscription = new Subscription();
+        this.keyboardSubscription.add(
+            this.keyboardService.onKeyboardChange.subscribe(() => {
+                if (this.keyboardService.isKeyboardOpen()) {
+                    this.dismissHintToast();
+                }
+            }),
+        );
     }
 
     override ngOnDestroy(): void {
         super.ngOnDestroy();
-        Keyboard.removeAllListeners();
+        this.keyboardSubscription.unsubscribe();
     }
 
     ionViewWillEnter() {
@@ -82,6 +92,16 @@ export default class AddWinePage extends ComponentBase {
     }
 
     next() {
+        if (!this.form.valid) {
+            Object.keys(this.form.controls).forEach((key) => {
+                const control = (this.form.controls as any)[key];
+                if (!control.valid) {
+                    setControlAsInvalid(control);
+                }
+            });
+            return;
+        }
+
         const recipe: Recipe = {
             slug: slugify(this.form.value.name ?? ``),
             name: this.form.value.name ?? ``,
@@ -94,9 +114,10 @@ export default class AddWinePage extends ComponentBase {
                 },
             ],
         };
+
         this.router.navigate([`/tabs`, `tab-production`, `add-wine`, `detail`], {
             queryParams: {
-                recipe: JSON.stringify(recipe),
+                recipe: JSON.stringify(getRecipeStages(recipe)),
             },
         });
     }

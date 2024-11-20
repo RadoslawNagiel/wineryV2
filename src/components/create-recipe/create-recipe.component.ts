@@ -1,23 +1,21 @@
-import { Component, EventEmitter, Output } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { NgClass } from '@angular/common';
+import { Component, EventEmitter, Output, input } from '@angular/core';
+import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import { Ingredient, Units } from '../../utils/interfaces';
 import { ComponentBase } from '../../utils/classes/component.base';
+import { Units } from '../../utils/interfaces';
 
 @Component({
     standalone: true,
-    imports: [IonicModule, FormsModule, ReactiveFormsModule],
+    imports: [IonicModule, FormsModule, ReactiveFormsModule, NgClass],
     selector: 'create-recipe',
     templateUrl: './create-recipe.component.html',
+    styleUrl: `create-recipe.style.scss`,
 })
 export class CreateRecipeComponent extends ComponentBase {
     @Output() readonly formChanged = new EventEmitter<FormGroup>();
 
-    readonly form = new FormGroup({
-        name: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(40)]),
-        description: new FormControl<string | null>(null, [Validators.required]),
-        ingredients: new FormControl<Ingredient[]>([], [Validators.required]),
-    });
+    form = input.required<FormGroup<any>>();
 
     readonly Units = Units;
 
@@ -26,8 +24,8 @@ export class CreateRecipeComponent extends ComponentBase {
     ingredientUnit: Units | undefined;
 
     ngOnInit() {
-        this.subs.sink = this.form.valueChanges.subscribe(() => {
-            this.formChanged.next(this.form);
+        this.subs.sink = this.form().valueChanges.subscribe(() => {
+            this.formChanged.next(this.form());
         });
     }
 
@@ -39,21 +37,21 @@ export class CreateRecipeComponent extends ComponentBase {
         if (!this.ingredientName || !this.ingredientAmount || !this.ingredientUnit) {
             return;
         }
-        const ingredients = this.form.value.ingredients ?? [];
+        const ingredients = this.form().value.ingredients ?? [];
         ingredients.unshift({
             name: this.ingredientName,
             value: this.ingredientAmount,
             unit: this.ingredientUnit,
         });
-        this.form.controls.ingredients.setValue(ingredients);
+        this.form().controls[`ingredients`].setValue(ingredients);
         this.ingredientName = ``;
         this.ingredientAmount = undefined;
         this.ingredientUnit = undefined;
     }
 
     minusClick(index: number) {
-        const ingredients = this.form.value.ingredients ?? [];
+        const ingredients = this.form().value.ingredients ?? [];
         ingredients.splice(index, 1);
-        this.form.controls.ingredients.setValue(ingredients);
+        this.form().controls[`ingredients`].setValue(ingredients);
     }
 }

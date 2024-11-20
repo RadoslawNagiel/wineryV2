@@ -14,7 +14,7 @@
                 <ion-input
                     autocapitalize="sentences"
                     autocorrect="on"
-                    label="Nazwa"
+                    label="Nazwa *"
                     labelPlacement="floating"
                     maxlength="52"
                     formControlName="name"
@@ -22,11 +22,11 @@
             </ion-item>
 
             <ion-item>
-                <ion-input label="Data" labelPlacement="floating" type="date" formControlName="date"></ion-input>
+                <ion-input label="Data *" labelPlacement="floating" type="date" formControlName="date"></ion-input>
             </ion-item>
 
             <ion-item>
-                <ion-input label="Pojemność (litry)" labelPlacement="floating" type="number" min="0" formControlName="capacity"></ion-input>
+                <ion-input label="Objętość (litry) *" labelPlacement="floating" type="number" min="0" formControlName="capacity"></ion-input>
             </ion-item>
 
             <ion-item>
@@ -37,7 +37,7 @@
                 <ion-range
                     #toleranceRange
                     labelPlacement="fixed"
-                    label="Tolerancja drożdży"
+                    label="Tolerancja drożdży *"
                     formControlName="yeastTolerance"
                     [pin]="true"
                     [ticks]="false"
@@ -51,7 +51,7 @@
             <ion-item>
                 <ion-range
                     labelPlacement="fixed"
-                    label="Moc wina"
+                    label="Moc wina *"
                     formControlName="power"
                     [pin]="true"
                     [ticks]="false"
@@ -63,7 +63,7 @@
             </ion-item>
 
             <ion-item>
-                <ion-select label="Słodkość" okText="Potwierdź" cancelText="Anuluj" formControlName="sweetness">
+                <ion-select label="Słodkość *" okText="Potwierdź" cancelText="Anuluj" formControlName="sweetness">
                     <ion-select-option [value]="Sweetness.dry">Wytrawne</ion-select-option>
                     <ion-select-option [value]="Sweetness.semiDry">Półwytrawne</ion-select-option>
                     <ion-select-option [value]="Sweetness.semiSweet">Półsłodkie</ion-select-option>
@@ -93,10 +93,16 @@
             </ion-item>
         </ion-list>
     </form>
+
+    @if(keyboardService.isKeyboardOpen()){
+    <ion-button class="w-full mt-4" size="large" (click)="addVineClick()">Dodaj</ion-button>
+    }
 </ion-content>
 
+@if(!keyboardService.isKeyboardOpen()){
 <ion-footer>
     <ion-toolbar>
-        <ion-button class="w-full ion-padding-horizontal" size="large" [disabled]="!form.valid" (click)="addVineClick()">Dodaj</ion-button>
+        <ion-button class="w-full ion-padding-horizontal" size="large" (click)="addVineClick()">Dodaj</ion-button>
     </ion-toolbar>
 </ion-footer>
+}
