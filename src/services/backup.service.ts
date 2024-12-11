@@ -12,6 +12,7 @@ export class BackupService {
     readonly store = inject(Store);
 
     async saveData() {
+        console.log(`saveData`);
         await this.checkPermission();
         let state = localStorage.getItem(`state`);
         if (state) {
@@ -24,7 +25,9 @@ export class BackupService {
                 encoding: Encoding.UTF8,
             });
             this.toastService.presentToastSuccess(`Zapisano w folderze "dokumenty"`);
+            return;
         }
+        this.toastService.presentToastError(`Brak danych do zapisu`);
     }
 
     loadData(json: string) {
@@ -42,6 +45,7 @@ export class BackupService {
 
     async checkPermission() {
         const permission = await Filesystem.requestPermissions();
+        console.log(`permission`, permission);
         if (permission.publicStorage === `denied`) {
             this.toastService.presentToastError(`Brak uprawnień`);
         }
